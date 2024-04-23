@@ -36,8 +36,12 @@ public class UserAccount {
     @Column(name = "github")
     private String github;
 
-    @Column(name = "roles", nullable = false, length = 12)
+    @Column(name = "roles", nullable = false)
     private String roles;
+
+    public String getRoles() {
+        return roles;
+    }
 
     public Integer getId() {
         return id;
@@ -110,13 +114,4 @@ public class UserAccount {
     public void setGithub(String github) {
         this.github = github;
     }
-
-    public String getRoles() {
-        return roles;
-    }
-
-    public void setRoles(String roles) {
-        this.roles = roles;
-    }
-
 }
