@@ -1,19 +1,21 @@
 package com.example.devconnect.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "image")
 public class Image {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnDefault("nextval('image_id_seq'")
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "filepath", nullable = false)
-    private String filepath;
+    @Column(name = "file_path", nullable = false)
+    private String filePath;
 
     public Integer getId() {
         return id;
@@ -23,12 +25,12 @@ public class Image {
         this.id = id;
     }
 
-    public String getFilepath() {
-        return filepath;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setFilepath(String filepath) {
-        this.filepath = filepath;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
 }

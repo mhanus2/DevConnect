@@ -7,18 +7,17 @@ import org.hibernate.annotations.ColumnDefault;
 @Table(name = "project_tag")
 public class ProjectTag {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnDefault("nextval('project_tag_id_seq'")
     @Column(name = "id", nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "projectid", nullable = false)
-    private Project projectid;
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "tagid", nullable = false)
-    private Tag tagid;
+    @JoinColumn(name = "tag_id", nullable = false)
+    private Tag tag;
 
     public Integer getId() {
         return id;
@@ -28,20 +27,20 @@ public class ProjectTag {
         this.id = id;
     }
 
-    public Project getProjectid() {
-        return projectid;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectid(Project projectid) {
-        this.projectid = projectid;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
-    public Tag getTagid() {
-        return tagid;
+    public Tag getTag() {
+        return tag;
     }
 
-    public void setTagid(Tag tagid) {
-        this.tagid = tagid;
+    public void setTag(Tag tag) {
+        this.tag = tag;
     }
 
 }

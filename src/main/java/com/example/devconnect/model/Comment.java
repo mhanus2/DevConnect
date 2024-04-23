@@ -16,12 +16,12 @@ public class Comment {
     private String value;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "projectid", nullable = false)
-    private Project projectid;
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "userid", nullable = false)
-    private Person userid;
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserAccount user;
 
     public Integer getId() {
         return id;
@@ -39,20 +39,20 @@ public class Comment {
         this.value = value;
     }
 
-    public Project getProjectid() {
-        return projectid;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectid(Project projectid) {
-        this.projectid = projectid;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
-    public Person getUserid() {
-        return userid;
+    public UserAccount getUser() {
+        return user;
     }
 
-    public void setUserid(Person userid) {
-        this.userid = userid;
+    public void setUser(UserAccount user) {
+        this.user = user;
     }
 
 }

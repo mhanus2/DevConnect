@@ -7,7 +7,6 @@ import org.hibernate.annotations.ColumnDefault;
 @Table(name = "project")
 public class Project {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnDefault("nextval('project_id_seq'")
     @Column(name = "id", nullable = false)
     private Integer id;
@@ -19,8 +18,8 @@ public class Project {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ownerid", nullable = false)
-    private Person ownerid;
+    @JoinColumn(name = "owner_id", nullable = false)
+    private UserAccount owner;
 
     public Integer getId() {
         return id;
@@ -46,12 +45,12 @@ public class Project {
         this.description = description;
     }
 
-    public Person getOwnerid() {
-        return ownerid;
+    public UserAccount getOwner() {
+        return owner;
     }
 
-    public void setOwnerid(Person ownerid) {
-        this.ownerid = ownerid;
+    public void setOwner(UserAccount owner) {
+        this.owner = owner;
     }
 
 }

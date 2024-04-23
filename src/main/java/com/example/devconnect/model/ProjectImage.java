@@ -7,18 +7,17 @@ import org.hibernate.annotations.ColumnDefault;
 @Table(name = "project_image")
 public class ProjectImage {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnDefault("nextval('project_image_id_seq'")
     @Column(name = "id", nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "projectid", nullable = false)
-    private Project projectid;
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "imageid", nullable = false)
-    private Image imageid;
+    @JoinColumn(name = "image_id", nullable = false)
+    private Image image;
 
     public Integer getId() {
         return id;
@@ -28,20 +27,20 @@ public class ProjectImage {
         this.id = id;
     }
 
-    public Project getProjectid() {
-        return projectid;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectid(Project projectid) {
-        this.projectid = projectid;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
-    public Image getImageid() {
-        return imageid;
+    public Image getImage() {
+        return image;
     }
 
-    public void setImageid(Image imageid) {
-        this.imageid = imageid;
+    public void setImage(Image image) {
+        this.image = image;
     }
 
 }
