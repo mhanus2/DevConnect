@@ -18,13 +18,13 @@ public class UserAccountController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping("/register/user")
+    @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new UserAccount());
         return "register";
     }
 
-    @PostMapping("/register/user")
+    @PostMapping("/register")
     public String registerUser(@ModelAttribute UserAccount user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userAccountRepository.save(user);
