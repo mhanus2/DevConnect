@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link th:href="@{style.css}" rel="stylesheet" >
+    <link rel="stylesheet" href="/css/style.css">
     <title>ForLife</title>
 </head>
 
@@ -29,6 +28,8 @@
                         <li><a href="sport.html">Sport</a></li>
                         <li><a href="relax.html">Relax</a></li>
                         <li><a href="about.html">O nás</a></li>
+                        <li><a th:href="@{/login}">Přihlášení</a></li>
+                        <li><a th:href="@{/register}">Registrace</a></li>
                     </ul>
                 </div>
             </nav>
@@ -55,30 +56,9 @@
 
         <section id="boxes">
             <div class="container">
-                <div class="box">
-                    <img src="./styles/images/apple.png" alt="Zdravá výživa">
-                    <h3>Zdravá výživa</h3>
-                    <p>Jedná se o vyvážený způsob stravování, kdy tělo díky zdravým potravinám získává potřebné látky v
-                        ideálním poměru. Mezi tyto látky patří například bílkoviny, sacharidy, tuky, minerální látky
-                        nebo třeba enzymy a další bioaktivní látky. Výhodou zásad zdravého jídelníčku je také
-                        předcházení chronickým nemocem. Nejenže tím podpoříte svou imunitu, ale také si správnou stravou
-                        zlepšíte i celkovou fyzickou a psychickou kondici.</p>
-                </div>
-                <div class="box">
-                    <img src="./styles/images/sport.png" alt="Sport">
-                    <h3>Sport</h3>
-                    <p>Dalším důležitým aspektem zdravého životního stylu je sport. Sport působí jak na fyzické zdraví,
-                        tak i podporuje psychický stav člověka. Pohyb má pozitivní účinky jak na metabolismus, tak i
-                        celkovou kondici a koncentraci. Při každém pohybu se nám zrychluje metabolismus a naše tělo
-                        následně spaluje tuky mnohem rychleji. Dalším pozitivním účinkem při cvičení je uvolňování
-                        hormonu štěstí endorfinu.</p>
-                </div>
-                <div class="box">
-                    <img src="./styles/images/yoga.png" alt="Relax">
-                    <h3>Relax</h3>
-                    <p>Díky relaxu přichází velká škála výhod, které mají pozitivní vliv na naše tělo i duši. Zlepšujeme
-                        tím kvalitu našeho života ve všech oblastech. Ať už se jedná o naše fyzické, či duševní zdraví,
-                        ale taky se zlepší naše pracovní výkonnost koncentrace.</p>
+                <div class="box" th:each="project: ${projects}">
+                    <h3 th:text="${project.title}"></h3>
+                    <p th:text="${project.description}"></p>
                 </div>
             </div>
         </section>
