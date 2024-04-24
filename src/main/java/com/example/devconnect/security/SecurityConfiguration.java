@@ -18,14 +18,18 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    @Autowired
-    private UserAccountDetailsService userDetailsService;
+    private final UserAccountDetailsService userDetailsService;
+
+    public SecurityConfiguration(UserAccountDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
+                    registry.requestMatchers("/").permitAll();
                     registry.requestMatchers("/home", "/register/**").permitAll();
                     registry.requestMatchers("/admin/**").hasRole("ADMIN");
                     registry.requestMatchers("/user/**").hasRole("USER");
@@ -34,6 +38,7 @@ public class SecurityConfiguration {
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .build();
     }
+
 
     @Bean
     public UserAccountDetailsService userDetailsService() {

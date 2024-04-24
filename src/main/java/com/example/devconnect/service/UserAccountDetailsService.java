@@ -2,7 +2,6 @@ package com.example.devconnect.service;
 
 import com.example.devconnect.model.UserAccount;
 import com.example.devconnect.repository.UserAccountRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,8 +13,11 @@ import java.util.Optional;
 @Service
 public class UserAccountDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UserAccountRepository repository;
+    private final UserAccountRepository repository;
+
+    public UserAccountDetailsService(UserAccountRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -24,18 +26,18 @@ public class UserAccountDetailsService implements UserDetailsService {
             var userObj = user.get();
             return User.builder()
                     .username(userObj.getUsername())
-                    .password(userObj.getUserPassword())
-                    .roles(getRoles(userObj))
+                    .password(userObj.getPassword())
+                    .roles(getRole(userObj))
                     .build();
         } else {
             throw new UsernameNotFoundException(username);
         }
     }
 
-    private String[] getRoles(UserAccount user) {
-        if (user.getRoles() == null) {
-            return new String[]{"USER"};
+    private String getRole(UserAccount user) {
+        if (user.getRole() == null) {
+            return "USER";
         }
-        return user.getRoles().split(",");
+        return user.getRole();
     }
 }

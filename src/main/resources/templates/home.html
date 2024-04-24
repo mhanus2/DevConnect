@@ -1,11 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{style.css}" rel="stylesheet" >
+    <title>ForLife</title>
 </head>
-<body>
-<h1>Home</h1>
 
+<body>
+    <header>
+        <div class="container">
+            <a href="home.html">
+                <div id="logo">
+                    <h1>For<span class="highlight">Life</span></h1>
+                </div>
+            </a>
+
+            <span id="burger_menu" onclick="openNav()">&#9776;</span>
+
+            <nav>
+                <div id="mySidenav" class="sidenav">
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                    <ul>
+                        <li class="current"><a href="home.html">Domů</a></li>
+                        <li><a href="diet.html">Výživa</a></li>
+                        <li><a href="sport.html">Sport</a></li>
+                        <li><a href="relax.html">Relax</a></li>
+                        <li><a href="about.html">O nás</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="showcase">
+            <div class="container">
+                <h2>Zdravý životní styl je základ!</h2>
+                <p>
+                    Potřebujete poradit s výživou? Chcete zhubnout? Hledáte způsob, jak zlepšit svůj životní styl?
+                    Neváhejte napsat!
+                </p>
+            </div>
+        </section>
+
+        <section id="introduction">
+            <div class="container">
+                <h2>S čím Vám pomůžeme?</h2>
+                <div>Zde si můžete vybrat z několika různých témat:</div>
+            </div>
+        </section>
+
+        <section id="boxes">
+            <div class="container">
+                <div class="box">
+                    <img src="./styles/images/apple.png" alt="Zdravá výživa">
+                    <h3>Zdravá výživa</h3>
+                    <p>Jedná se o vyvážený způsob stravování, kdy tělo díky zdravým potravinám získává potřebné látky v
+                        ideálním poměru. Mezi tyto látky patří například bílkoviny, sacharidy, tuky, minerální látky
+                        nebo třeba enzymy a další bioaktivní látky. Výhodou zásad zdravého jídelníčku je také
+                        předcházení chronickým nemocem. Nejenže tím podpoříte svou imunitu, ale také si správnou stravou
+                        zlepšíte i celkovou fyzickou a psychickou kondici.</p>
+                </div>
+                <div class="box">
+                    <img src="./styles/images/sport.png" alt="Sport">
+                    <h3>Sport</h3>
+                    <p>Dalším důležitým aspektem zdravého životního stylu je sport. Sport působí jak na fyzické zdraví,
+                        tak i podporuje psychický stav člověka. Pohyb má pozitivní účinky jak na metabolismus, tak i
+                        celkovou kondici a koncentraci. Při každém pohybu se nám zrychluje metabolismus a naše tělo
+                        následně spaluje tuky mnohem rychleji. Dalším pozitivním účinkem při cvičení je uvolňování
+                        hormonu štěstí endorfinu.</p>
+                </div>
+                <div class="box">
+                    <img src="./styles/images/yoga.png" alt="Relax">
+                    <h3>Relax</h3>
+                    <p>Díky relaxu přichází velká škála výhod, které mají pozitivní vliv na naše tělo i duši. Zlepšujeme
+                        tím kvalitu našeho života ve všech oblastech. Ať už se jedná o naše fyzické, či duševní zdraví,
+                        ale taky se zlepší naše pracovní výkonnost koncentrace.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>Studentský zápočtový projekt na KTPW1 | 2023 Copyright &copy; Hanuš Martin | Email: hanusma2@uhk.cz |
+            Poslední úprava provedena 20. ledna 2023</p>
+    </footer>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "100%";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+
+        window.addEventListener('resize', function (event) {
+            if (window.innerWidth > 768) {
+                document.getElementById("mySidenav").style.width = "100%";
+            } else {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+        }, true);
+
+    </script>
 </body>
+
 </html>

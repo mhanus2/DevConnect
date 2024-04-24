@@ -1,0 +1,435 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font: 0.9em/1.5 Arial, Helvetica, sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+/* Global */
+main {
+    flex: 1;
+    margin-top: 100px;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+.button_form {
+    height: 25px;
+    background: #fe8e35;
+    border: 0;
+    border-radius: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 15px;
+    color: #111;
+}
+
+.dark {
+    padding: 15px;
+    background: #35424a;
+    color: #ffffff;
+    margin-top: 10px;
+}
+
+/* Header */
+header {
+    background: #283618;
+    padding-top: 15px;
+    height: 60px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    color: #ffffff;
+    z-index: 100;
+    border-bottom: 20px solid #606c38;
+}
+
+header #logo {
+    float: left;
+    color: #ffffff;
+}
+
+header #logo h1 {
+    margin: 0;
+}
+
+header .highlight,
+header .current a {
+    color: #fe8e35;
+}
+
+header nav {
+    float: right;
+    margin-top: 12px;
+}
+
+header nav a {
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 1em;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+header li {
+    float: left;
+    display: inline;
+    padding: 0 20px 0 20px;
+    animation: stretch 0.5s ease-out;
+}
+
+header nav .closebtn {
+    display: none;
+}
+
+header #burger_menu {
+    display: none;
+}
+
+#mySidenav li {
+    transition: 0.3s;
+}
+
+#mySidenav li:hover {
+    transform: scale(1.1);
+}
+
+/* Showcase */
+#showcase {
+    min-height: 275px;
+    text-align: center;
+    padding: 15px;
+}
+
+#showcase h2 {
+    font-size: 3.438em;
+}
+
+#showcase p {
+    font-size: 1.25em;
+}
+
+/* Introduction */
+#introduction {
+    padding: 15px;
+    color: #ffffff;
+    background: #606c38;
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+/* Boxes */
+#boxes {
+    margin-top: 50px;
+}
+
+#boxes .container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+#boxes .box {
+    text-align: center;
+    width: 30%;
+    padding: 10px;
+}
+
+#boxes .box img {
+    width: 120px;
+}
+
+/* Sidebar */
+#sidebar {
+    float: right;
+    width: 30%;
+    margin-top: 55px;
+}
+
+#sidebar .dark {
+    margin-top: 15px;
+}
+
+#sidebar h3 {
+    color: #fe8e35;
+}
+
+#prices {
+    border: 1px solid white;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#prices th,
+#prices td {
+    border: 1px solid white;
+    text-align: center;
+}
+
+#contact {
+    width: 100%;
+}
+
+#sidebar form div {
+    margin-top: 10px;
+}
+
+#sidebar form div label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#sidebar .button_form {
+    cursor: pointer;
+}
+
+#sidebar form div input,
+#sidebar form div textarea {
+    width: 90%;
+}
+
+#sidebar form div textarea {
+    height: 50px;
+}
+
+#relaxation, #vegetables {
+    width: 100%;
+}
+
+#vegetables {
+    margin-top: 10%;
+}
+
+#link_highlight {
+    color: #fe8e35;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* Main-col */
+#main-col {
+    float: left;
+    width: 65%;
+}
+
+#main-col #address {
+    margin-top: 50px;
+}
+
+#main-col iframe {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+    height: 500px;
+    display: block;
+}
+
+/* Topics */
+#topics li {
+    list-style: none;
+    padding: 20px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border: #cccccc solid 1px;
+    background: #e6e6e6;
+}
+
+/* Footer */
+footer {
+    padding: 20px;
+    margin-top: 20px;
+    color: #ffffff;
+    background-color: #283618;
+    text-align: center;
+}
+
+/* Slideshow Gallery */
+#gallery {
+    float: right;
+    width: 35%;
+}
+
+#gallery .container {
+    position: relative;
+    box-sizing: border-box;
+}
+
+#gallery .container img {
+    vertical-align: middle;
+    width: 100%;
+}
+
+/* Hide the images by default */
+.mySlides {
+    display: none;
+}
+
+/* Add a pointer when hovering over the thumbnail images */
+.cursor {
+    cursor: pointer;
+}
+
+/* Next & previous buttons */
+.prev,
+.next {
+    cursor: pointer;
+    position: absolute;
+    top: 40%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: white;
+    font-weight: bold;
+    font-size: 1.25em;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+    background-color: #000000;
+}
+
+/* Position the "next button" to the right */
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+    color: #f2f2f2;
+    font-size: 0.75em;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+    background-color: #000000;
+}
+
+/* Container for image text */
+.caption-container {
+    text-align: center;
+    background-color: #222;
+    padding: 2px 16px;
+    color: white;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Six columns side by side */
+.column {
+    float: left;
+    width: 25%;
+}
+
+/* Add a transparency effect for thumnbail images */
+.demo {
+    opacity: 0.6;
+}
+
+.active,
+.demo:hover {
+    opacity: 1;
+}
+
+
+/* Media Queries */
+@media(max-width: 768px) {
+
+    #newsletter h1,
+    #newsletter form,
+    #boxes .box,
+    #main-col,
+    #sidebar {
+        float: none;
+        text-align: center;
+        width: 100%;
+    }
+
+    header .container #burger_menu {
+        position: absolute;
+        right: 15px;
+        top: 5px;
+        display: block;
+        font-size: 3.125em;
+        cursor: pointer;
+    }
+
+    header nav .sidenav .closebtn {
+        display: block;
+        position: absolute;
+        top: 5px;
+        right: 25px;
+        font-size: 2.5em;
+        margin-left: 50px;
+    }
+
+    .sidenav {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        background-color: #111;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 30px;
+    }
+
+    .sidenav ul a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 1.563em;
+        display: block;
+        transition: 0.5s;
+        height: 50px;
+    }
+
+    .sidenav li,
+    #gallery .container {
+        width: 100%;
+    }
+
+    .sidenav a:hover {
+        color: #f1f1f1;
+    }
+
+    .sidenav a {
+        font-size: 1.125em;
+    }
+
+    #showcase h2 {
+        margin-top: 10px;
+    }
+
+    #sidebar,
+    #relaxation {
+        margin-top: 0;
+    }
+
+    #gallery {
+        float: none;
+        width: 100%;
+    }
+
+    .button_form {
+        width: 50%;
+        height: 35px;
+    }
+}
