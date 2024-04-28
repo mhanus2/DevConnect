@@ -5,12 +5,14 @@ body {
     font: 0.9em/1.5 Arial, Helvetica, sans-serif;
     padding: 0;
     margin: 0;
+    background: #23272a;
+
 }
 
 /* Global */
 main {
     flex: 1;
-    margin-top: 100px;
+    padding-top: 100px;
 }
 
 .container {
@@ -46,7 +48,9 @@ ul {
 
 /* Header */
 header {
-    background: #283618;
+    /*background: #283618;*/
+    background: #23272a;
+    /*background: #00ADB5;*/
     padding-top: 15px;
     height: 60px;
     position: fixed;
@@ -54,7 +58,8 @@ header {
     top: 0;
     color: #ffffff;
     z-index: 100;
-    border-bottom: 20px solid #606c38;
+    /*border-bottom: 20px solid #606c38;*/
+    /*border-bottom: 20px solid #5B65EA;*/
 }
 
 header #logo {
@@ -68,7 +73,9 @@ header #logo h1 {
 
 header .highlight,
 header .current a {
-    color: #fe8e35;
+    /*color: #fe8e35;*/
+    /*color: #5B65EA;*/
+    /*color: #222831;*/
 }
 
 header nav {
@@ -112,6 +119,8 @@ header #burger_menu {
     min-height: 275px;
     text-align: center;
     padding: 15px;
+    background: #23272a;
+    color: #ffffff;
 }
 
 #showcase h2 {
@@ -126,14 +135,16 @@ header #burger_menu {
 #introduction {
     padding: 15px;
     color: #ffffff;
-    background: #606c38;
+    /*background: #606c38;*/
+    background: #434EE4;
     text-align: center;
     padding-bottom: 30px;
 }
 
 /* Boxes */
 #boxes {
-    margin-top: 50px;
+    padding-top: 50px;
+    background: #FFFFFF;
 }
 
 #boxes .container {
@@ -239,7 +250,7 @@ header #burger_menu {
 }
 
 /* Topics */
-#topics li {
+#topics {
     list-style: none;
     padding: 20px;
     margin-top: 10px;
@@ -253,7 +264,7 @@ footer {
     padding: 20px;
     margin-top: 20px;
     color: #ffffff;
-    background-color: #283618;
+    background-color: #23272a;
     text-align: center;
 }
 
