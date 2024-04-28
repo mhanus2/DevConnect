@@ -20,7 +20,7 @@ public class Project {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "owner_id", nullable = false)
-    private UserAccount owner;
+    private Profile owner;
 
     public Integer getId() {
         return id;
@@ -46,11 +46,11 @@ public class Project {
         this.description = description;
     }
 
-    public UserAccount getOwner() {
+    public Profile getOwner() {
         return owner;
     }
 
-    public void setOwner(UserAccount owner) {
+    public void setOwner(Profile owner) {
         this.owner = owner;
     }
 
