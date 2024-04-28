@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>ForLife | Výživa</title>
+</head>
+
+<body>
+<header th:include="components/header"></header>
+<main>
+    <div id="main" class="container">
+        <article id="main-col">
+            <h2 class="page-title" th:text="${project.title}"></h2>
+            <ul id="topics">
+                <li>
+                    <h3 th:text="${project.title}"></h3>
+                    <p th:text="${project.description}"></p>
+                </li>
+            </ul>
+        </article>
+
+        <aside id="sidebar">
+            <div class="dark">
+                <h3 th:text="${project.owner.username}"></h3>
+                <p>Status of user</p>
+            </div>
+            <div class="dark">
+                <h3>Vzorový jídelníček</h3>
+                <p>Máte zájem si seskládat vlastní jídelníček? My Vám s tím pomůžeme. Zde máte příklad pro
+                    představu: <a
+                            href="https://www.mojemedicina.cz/pruvodce-pacienta/diagnozy/obezita/hubnuti/ukazkovy-jidelnicek.html"
+                            id="link_highlight">
+                        Příklad&nbsp;jídelníčku</a></p>
+            </div>
+        </aside>
+    </div>
+</main>
+<footer>
+    <p>Studentský zápočtový projekt na KTPW1 | 2023 Copyright &copy; Hanuš Martin | Email: hanusma2@uhk.cz |
+        Poslední úprava provedena 20. ledna 2023</p>
+</footer>
+</body>
+
+</html>

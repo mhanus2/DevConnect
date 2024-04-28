@@ -3,39 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
     <title>ForLife</title>
 </head>
 
 <body>
-    <header>
-        <div class="container">
-            <a href="home.html">
-                <div id="logo">
-                    <h1>For<span class="highlight">Life</span></h1>
-                </div>
-            </a>
-
-            <span id="burger_menu" onclick="openNav()">&#9776;</span>
-
-            <nav>
-                <div id="mySidenav" class="sidenav">
-                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                    <ul>
-                        <li class="current"><a href="home.html">Domů</a></li>
-                        <li><a href="diet.html">Výživa</a></li>
-                        <li><a href="sport.html">Sport</a></li>
-                        <li><a href="relax.html">Relax</a></li>
-                        <li><a href="about.html">O nás</a></li>
-                        <li><a th:href="@{/login}">Přihlášení</a></li>
-                        <li><a th:href="@{/register}">Registrace</a></li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-    </header>
-
+    <header th:include="components/header"></header>
     <main>
         <section id="showcase">
             <div class="container">
@@ -56,9 +31,9 @@
 
         <section id="boxes">
             <div class="container">
-                <div class="box" th:each="project: ${projects}">
-                    <h3 th:text="${project.title}"></h3>
-                    <p th:text="${project.description}"></p>
+                <div class="box" th:each="project : ${projects}">
+                    <a th:href="@{/project/{id}(id=*{project.id})}"><h3 th:text="*{project.title}"></h3></a>
+                    <p th:text="*{project.description}"></p>
                 </div>
             </div>
         </section>
