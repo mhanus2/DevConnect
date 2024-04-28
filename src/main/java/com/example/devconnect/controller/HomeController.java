@@ -18,7 +18,7 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String sayHello(Model model) {
+    public String getHome(Model model) {
         List<Project> projects = projectService.getAllProjects();
         model.addAttribute("projects", projects);
         return "home";
