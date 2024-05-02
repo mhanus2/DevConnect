@@ -1,22 +1,23 @@
-package com.example.devconnect.model;
+package com.example.devconnect;
 
+import com.example.devconnect.model.UserAccount;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
-@Table(name = "project")
-public class Project {
+@Table(name = "skill")
+public class Skill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ColumnDefault("nextval('project_id_seq'")
+    @ColumnDefault("nextval('skill_id_seq'")
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "title", nullable = false)
-    private String title;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "detail")
+    private String detail;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "owner_id", nullable = false)
@@ -30,20 +31,20 @@ public class Project {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDetail() {
+        return detail;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     public UserAccount getOwner() {

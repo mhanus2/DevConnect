@@ -15,7 +15,7 @@ public class UserAccountDetailsService implements UserDetailsService {
 
     private final UserAccountRepository repository;
 
-    public UserAccountDetailsService(UserAccountRepository repository) {
+    public UserAccountDetailsService(UserAccountRepository repository, UserAccountRepository userAccountRepository) {
         this.repository = repository;
     }
 
@@ -40,4 +40,17 @@ public class UserAccountDetailsService implements UserDetailsService {
         }
         return user.getRole();
     }
+
+    public void saveUser(UserAccount user) {
+        repository.save(user);
+    }
+
+    public Optional<UserAccount> getUserByUsername(String username) {
+        return repository.findByUsername(username);
+    }
+
+    public Optional<UserAccount> getUserById(Integer id) {
+        return repository.findById(id);
+    }
+
 }

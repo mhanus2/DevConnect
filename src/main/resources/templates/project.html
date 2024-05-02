@@ -12,6 +12,13 @@
 <body>
 <header th:include="components/header"></header>
 <main>
+    <div th:if="${#authentication.name == project.owner.username}">
+        <a th:href="@{/project/edit/{id}(id=${project.id})}">Upravit</a>
+        <a th:href="@{/project/delete/{id}(id=${project.id})}">Smazat</a>
+        <form action="#" th:action="@{/project/delete/{id}(id=${project.id})}" th:method="get" onsubmit="return confirm('Are you sure you want to delete this project?');">
+            <input type="submit" value="Delete">
+        </form>
+    </div>
     <div id="main" class="container">
         <article id="main-col">
             <h2 class="page-title" th:text="${project.title}"></h2>
