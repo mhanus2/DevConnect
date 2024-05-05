@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -30,6 +31,15 @@
                 </li>
             </ul>
         </article>
+        <div sec:authorize="isAuthenticated"><a th:href="@{/skills/create}">Přidat novou dovednost</a></div>
+        <section id="boxes">
+            <div class="container">
+                <div class="box" th:each="skill : ${skills}">
+                    <a th:href="@{/skills/{skillId}(skillId=*{skill.id})}"><h3 th:text="*{skill.name}"></h3></a>
+                    <p th:text="*{skill.detail}"></p>
+                </div>
+            </div>
+        </section>
     </div>
 </main>
 <footer>

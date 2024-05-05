@@ -32,7 +32,7 @@ public class ProjectController {
 
         List<Project> projects = projectService.getProjectsByOwner(user);
         model.addAttribute("projects", projects);
-        return "projects";
+        return "project/projects";
     }
 
     @GetMapping("/project/{id}")
@@ -40,7 +40,7 @@ public class ProjectController {
         Project project = projectService.getProjectById(id);
         if (project != null) {
             model.addAttribute("project", project);
-            return "project";
+            return "project/project";
         } else {
             return "error";
         }
@@ -49,7 +49,7 @@ public class ProjectController {
     @GetMapping("/project/create")
     public String showCreateProjectForm(Model model) {
         model.addAttribute("project", new Project());
-        return "createProject";
+        return "project/createProject";
     }
 
     @PostMapping("/project/save")
@@ -73,7 +73,7 @@ public class ProjectController {
 
         if (Objects.equals(owner.getUsername(), principal.getName())) {
             model.addAttribute("project", project);
-            return "editProject";
+            return "project/editProject";
         } else {
             return "error";
         }
@@ -81,11 +81,14 @@ public class ProjectController {
 
     @PostMapping("/project/edit")
     public String editProject(@ModelAttribute Project project, Principal principal) {
-        UserAccount owner = project.getOwner();
+        Project existingProject = projectService.getProjectById(project.getId());
+
+        UserAccount owner = existingProject.getOwner();
 
         if (Objects.equals(owner.getUsername(), principal.getName())) {
+            project.setOwner(owner);
             projectService.editProject(project);
-            return "redirect:/project";
+            return "redirect:/project/" + project.getId();
         } else {
             return "error";
         }

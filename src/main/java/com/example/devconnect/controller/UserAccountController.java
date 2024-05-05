@@ -1,47 +1,64 @@
 package com.example.devconnect.controller;
 
+import com.example.devconnect.model.Skill;
 import com.example.devconnect.model.UserAccount;
-import com.example.devconnect.repository.UserAccountRepository;
+import com.example.devconnect.service.SkillService;
 import com.example.devconnect.service.UserAccountDetailsService;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.Optional;
+import java.util.List;
+
 
 @Controller
 public class UserAccountController {
 
     private final UserAccountDetailsService userAccountDetailsService;
+    private final SkillService skillService;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationProvider authenticationProvider;
 
-    public UserAccountController(UserAccountDetailsService userAccountDetailsService, PasswordEncoder passwordEncoder) {
+    public UserAccountController(UserAccountDetailsService userAccountDetailsService, SkillService skillService, PasswordEncoder passwordEncoder, AuthenticationProvider authenticationProvider) {
         this.userAccountDetailsService = userAccountDetailsService;
+        this.skillService = skillService;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationProvider = authenticationProvider;
     }
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new UserAccount());
-        return "register";
+        return "userAccount/register";
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute UserAccount user) {
+    public String registerUser(@ModelAttribute UserAccount user, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         user.setRole("USER");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userAccountDetailsService.saveUser(user);
-        return "redirect:/profile/" + user.getId();
+        return "redirect:/login";
     }
+
 
     @GetMapping("/profile/{id}")
     public String getProfileById(@PathVariable Integer id, Model model) {
         Optional<UserAccount> user = userAccountDetailsService.getUserById(id);
         if (user.isPresent()) {
+            List<Skill> skills = skillService.getAllSkills(user.get());
             model.addAttribute("profile", user);
-            return "profile";
+            model.addAttribute("skills", skills);
+            return "userAccount/profile";
         } else {
             return "error";
         }
@@ -56,7 +73,7 @@ public class UserAccountController {
                 return "error";
             }
             model.addAttribute("userAccount", currentUser);
-            return "editProfile";
+            return "userAccount/editProfile";
         } else {
             return "error";
         }

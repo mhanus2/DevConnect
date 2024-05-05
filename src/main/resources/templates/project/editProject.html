@@ -13,7 +13,7 @@
 <header th:include="components/header"></header>
 <main>
     <h1>Edit Project</h1>
-    <form action="#" th:action="@{/project/save}" th:object="${project}" method="post">
+    <form action="#" th:action="@{/project/edit}" th:object="${project}" method="post">
         <input type="hidden" th:field="*{id}">
         <label for="title">Title:</label><br>
         <input type="text" id="title" th:field="*{title}" required><br>

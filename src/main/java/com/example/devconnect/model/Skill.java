@@ -1,6 +1,5 @@
-package com.example.devconnect;
+package com.example.devconnect.model;
 
-import com.example.devconnect.model.UserAccount;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 

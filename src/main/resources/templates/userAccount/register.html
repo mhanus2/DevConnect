@@ -8,9 +8,20 @@
     <link rel="stylesheet" href="/css/style.css">
     <title>ForLife</title>
 </head>
+
 <body>
-<header th:replace="components/header" ></header>
-<main></main>
+<header th:replace="components/header"></header>
+<main>
+    <form action="#" th:action="@{/register}" th:object="${user}" method="post">
+        <input type="text" th:field="*{username}" placeholder="Username" required>
+        <input type="text" th:field="*{firstName}" placeholder="First Name" required>
+        <input type="text" th:field="*{lastName}" placeholder="Last Name" required>
+        <input type="email" th:field="*{mail}" placeholder="Mail" required>
+        <input type="password" th:field="*{password}" placeholder="Password" required>
+        <input type="submit" value="Register">
+    </form>
+
+</main>
 <footer>
     <p>Studentský zápočtový projekt na KTPW1 | 2023 Copyright &copy; Hanuš Martin | Email: hanusma2@uhk.cz |
         Poslední úprava provedena 20. ledna 2023</p>

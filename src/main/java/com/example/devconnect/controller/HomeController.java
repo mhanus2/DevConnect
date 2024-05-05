@@ -31,7 +31,6 @@ public class HomeController {
         if (principal != null) {
             String username = principal.getName();
             Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(username);
-//            user.ifPresent(userAccount -> model.addAttribute("userId", "/profile/" + userAccount.getId()));
             user.ifPresent(userAccount -> model.addAttribute("userId", userAccount.getId()));
         }
         return "home";

@@ -1,10 +1,17 @@
-<div class="container">
-    <a th:href="@{/}">
-        <div id="logo">
-            <h1>Dev<span class="highlight">Connect</span></h1>
-        </div>
-    </a>
+<!DOCTYPE html>
+<html lang="cs" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="header">
+    <div class="container">
+        <a th:href="@{/}">
+            <div id="logo">
+                <h1>Dev<span class="highlight">Connect</span></h1>
+            </div>
+        </a>
 
-    <span id="burger_menu" onclick="openNav()">&#9776;</span>
-    <nav th:include="components/navbar"></nav>
-</div>
+        <span id="burger_menu" onclick="openNav()">&#9776;</span>
+        <nav th:insert="components/navbar"></nav>
+    </div>
+</header>
+</body>
+</html>

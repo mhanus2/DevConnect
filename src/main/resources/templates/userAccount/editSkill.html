@@ -8,9 +8,20 @@
     <link rel="stylesheet" href="/css/style.css">
     <title>ForLife</title>
 </head>
+
 <body>
-<header th:replace="components/header" ></header>
-<main></main>
+<header th:include="components/header"></header>
+<main>
+    <h1>Upravit Dovednost</h1>
+    <form action="#" th:action="@{/skills/edit/{id}(id=${skill.id})}" th:object="${skill}" method="post">
+        <input type="hidden" id="id" th:field="*{id}">
+        <label for="name">Název dovednosti:</label><br>
+        <input type="text" id="name" th:field="*{name}" required><br>
+        <label for="detail">Detail dovednosti:</label><br>
+        <input type="text" id="detail" th:field="*{detail}"><br>
+        <input type="submit" value="Upravit">
+    </form>
+</main>
 <footer>
     <p>Studentský zápočtový projekt na KTPW1 | 2023 Copyright &copy; Hanuš Martin | Email: hanusma2@uhk.cz |
         Poslední úprava provedena 20. ledna 2023</p>
