@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -28,6 +29,15 @@
                 </li>
             </ul>
         </article>
+
+        <div sec:authorize="isAuthenticated"><a th:href="@{/tag/create}">Přidat nový tag</a></div>
+        <section id="boxes">
+            <div class="container">
+                <div class="box" th:each="tag : ${tags}">
+                    <a th:href="@{/tags/{tagId}(tagId=*{tag.id})}"><h3 th:text="*{tag.name}"></h3></a>
+                </div>
+            </div>
+        </section>
 
         <aside id="sidebar">
             <div class="dark">

@@ -1,8 +1,10 @@
 package com.example.devconnect.controller;
 
 import com.example.devconnect.model.Skill;
+import com.example.devconnect.model.Tag;
 import com.example.devconnect.model.UserAccount;
 import com.example.devconnect.service.SkillService;
+import com.example.devconnect.service.TagService;
 import com.example.devconnect.service.UserAccountDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,13 +29,11 @@ public class UserAccountController {
     private final UserAccountDetailsService userAccountDetailsService;
     private final SkillService skillService;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationProvider authenticationProvider;
 
-    public UserAccountController(UserAccountDetailsService userAccountDetailsService, SkillService skillService, PasswordEncoder passwordEncoder, AuthenticationProvider authenticationProvider) {
+    public UserAccountController(UserAccountDetailsService userAccountDetailsService, SkillService skillService, PasswordEncoder passwordEncoder) {
         this.userAccountDetailsService = userAccountDetailsService;
         this.skillService = skillService;
         this.passwordEncoder = passwordEncoder;
-        this.authenticationProvider = authenticationProvider;
     }
 
     @GetMapping("/register")

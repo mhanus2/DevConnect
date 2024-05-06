@@ -12,17 +12,11 @@
 <body>
 <header th:include="components/header"></header>
 <main>
-    <h1>Create Project</h1>
-    <form action="#" th:action="@{/project/save}" th:object="${project}" method="post">
-        <label for="title">Title:</label><br>
-        <input type="text" id="title" th:field="*{title}" required><br>
-        <label for="description">Description:</label><br>
-        <textarea id="description" th:field="*{description}"></textarea><br>
-        <label for="tags">Tags:</label><br>
-        <select id="tags" th:field="*{tags}" multiple>
-            <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}"></option>
-        </select><br>
-        <input type="submit" value="Submit">
+    <h1>Vytvořit Tag</h1>
+    <form action="#" th:action="@{/tags/create}" th:object="${tag}" method="post">
+        <label for="name">Název tagu:</label><br>
+        <input type="text" id="name" th:field="*{name}" required><br>
+        <input type="submit" value="Vytvořit">
     </form>
 </main>
 <footer>

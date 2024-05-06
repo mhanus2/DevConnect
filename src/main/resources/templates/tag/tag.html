@@ -12,18 +12,15 @@
 <body>
 <header th:include="components/header"></header>
 <main>
-    <h1>Create Project</h1>
-    <form action="#" th:action="@{/project/save}" th:object="${project}" method="post">
-        <label for="title">Title:</label><br>
-        <input type="text" id="title" th:field="*{title}" required><br>
-        <label for="description">Description:</label><br>
-        <textarea id="description" th:field="*{description}"></textarea><br>
-        <label for="tags">Tags:</label><br>
-        <select id="tags" th:field="*{tags}" multiple>
-            <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}"></option>
-        </select><br>
-        <input type="submit" value="Submit">
-    </form>
+<!--    todo - jen admin-->
+<!--    <div th:if="${#authentication.name == tag.owner.username}">-->
+<!--        <a th:href="@{/tags/edit/{id}(id=${tag.id})}">Upravit</a>-->
+<!--        <form action="#" th:action="@{/tags/delete/{id}(id=${tag.id})}" th:method="get" onsubmit="return confirm('Are you sure you want to delete this skill?');">-->
+<!--            <input type="submit" value="Delete">-->
+<!--        </form>-->
+<!--    </div>-->
+    <h1>Zobrazit Dovednost</h1>
+    <p><strong>Název dovednosti:</strong> <span th:text="${tag.name}"></span></p>
 </main>
 <footer>
     <p>Studentský zápočtový projekt na KTPW1 | 2023 Copyright &copy; Hanuš Martin | Email: hanusma2@uhk.cz |

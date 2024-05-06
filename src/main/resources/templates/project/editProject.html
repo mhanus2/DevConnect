@@ -19,6 +19,11 @@
         <input type="text" id="title" th:field="*{title}" required><br>
         <label for="description">Description:</label><br>
         <input type="text" id="description" th:field="*{description}" required><br>
+
+        <label for="tags">Tags:</label><br>
+        <select id="tags" th:field="*{tags}" multiple>
+            <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}"></option>
+        </select><br>
         <input type="submit" value="Save">
     </form>
 

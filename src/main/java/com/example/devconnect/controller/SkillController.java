@@ -1,6 +1,5 @@
 package com.example.devconnect.controller;
 
-import com.example.devconnect.model.Project;
 import com.example.devconnect.model.Skill;
 import com.example.devconnect.model.UserAccount;
 import com.example.devconnect.service.SkillService;
@@ -30,13 +29,13 @@ public class SkillController {
     public String showSkill(@PathVariable Integer id, Model model) {
         Skill skill = skillService.getSkill(id);
         model.addAttribute("skill", skill);
-        return "userAccount/skill";
+        return "skill/skill";
     }
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("skill", new Skill());
-        return "userAccount/createSkill";
+        return "skill/createSkill";
     }
 
     @PostMapping("/create")
@@ -59,7 +58,7 @@ public class SkillController {
 
         if (Objects.equals(owner.getUsername(), principal.getName())) {
             model.addAttribute("skill", skill);
-            return "userAccount/editSkill";
+            return "skill/editSkill";
         } else {
             return "error";
         }
