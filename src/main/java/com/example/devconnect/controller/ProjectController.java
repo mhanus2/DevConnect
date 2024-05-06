@@ -6,14 +6,14 @@ import com.example.devconnect.model.UserAccount;
 import com.example.devconnect.service.ProjectService;
 import com.example.devconnect.service.TagService;
 import com.example.devconnect.service.UserAccountDetailsService;
-import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.beans.PropertyEditorSupport;
 import java.security.Principal;
 import java.util.List;
 import java.util.Objects;

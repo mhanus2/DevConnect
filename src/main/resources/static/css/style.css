@@ -30,7 +30,7 @@ ul {
 
 .button_form {
     height: 25px;
-    background: #fe8e35;
+    background: #434EE4;
     border: 0;
     border-radius: 5px;
     padding-left: 20px;
@@ -39,10 +39,11 @@ ul {
     color: #111;
 }
 
+/*todo - Rename*/
 .dark {
     padding: 15px;
-    background: #35424a;
-    color: #ffffff;
+    background: #ffffff;
+    /*color: #ffffff;*/
     margin-top: 10px;
 }
 
@@ -135,7 +136,6 @@ header #burger_menu {
 #introduction {
     padding: 15px;
     color: #ffffff;
-    /*background: #606c38;*/
     background: #434EE4;
     text-align: center;
     padding-bottom: 30px;
@@ -175,7 +175,7 @@ header #burger_menu {
 }
 
 #sidebar h3 {
-    color: #fe8e35;
+    color: #434EE4;
 }
 
 #prices {
@@ -225,7 +225,7 @@ header #burger_menu {
 }
 
 #link_highlight {
-    color: #fe8e35;
+    color: #434EE4;
     font-weight: bold;
     text-decoration: none;
 }
