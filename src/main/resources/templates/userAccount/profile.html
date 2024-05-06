@@ -14,7 +14,7 @@
 <header th:include="components/header"></header>
 <main>
     <div th:if="${#authentication.name == profile.get().username}">
-        <a th:href="@{/profile/edit/{id}(id=${profile.get().id})}">Upravit</a>
+        <a class="button_form" th:href="@{/profile/edit/{id}(id=${profile.get().id})}">Upravit</a>
     </div>
     <div id="main" class="container">
         <article id="main-col">

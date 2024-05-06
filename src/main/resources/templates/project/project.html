@@ -14,7 +14,7 @@
 <header th:include="components/header"></header>
 <main>
     <div th:if="${#authentication.name == project.owner.username}">
-        <a th:href="@{/project/edit/{id}(id=${project.id})}">Upravit</a>
+        <a class="button_form" th:href="@{/project/edit/{id}(id=${project.id})}">Upravit</a>
         <form action="#" th:action="@{/project/delete/{id}(id=${project.id})}" th:method="get" onsubmit="return confirm('Are you sure you want to delete this project?');">
             <input type="submit" value="Delete">
         </form>
@@ -30,7 +30,6 @@
             </ul>
         </article>
 
-        <div sec:authorize="isAuthenticated"><a th:href="@{/tag/create}">Přidat nový tag</a></div>
         <section id="boxes">
             <div class="container">
                 <div class="box" th:each="tag : ${tags}">
