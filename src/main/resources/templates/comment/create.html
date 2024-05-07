@@ -15,7 +15,7 @@
     <h1>Vytvořit Komentář</h1>
     <form action="#" th:action="@{/projects/{id}/comments/create(id=${projectId})}" th:object="${comment}" method="post">
         <label for="value">Komentář:</label><br>
-        <input type="text" id="value" th:field="*{value}" required><br>
+        <textarea id="value" th:field="*{value}" required></textarea><br>
         <input type="submit" value="Vytvořit">
     </form>
 </main>
