@@ -1,8 +1,10 @@
 package com.example.devconnect.controller;
 
+import com.example.devconnect.model.Comment;
 import com.example.devconnect.model.Project;
 import com.example.devconnect.model.Tag;
 import com.example.devconnect.model.UserAccount;
+import com.example.devconnect.service.CommentService;
 import com.example.devconnect.service.ProjectService;
 import com.example.devconnect.service.TagService;
 import com.example.devconnect.service.UserAccountDetailsService;
@@ -23,14 +25,16 @@ import java.util.Optional;
 public class ProjectController {
 
     private final UserAccountDetailsService userAccountDetailsService;
-    ProjectService projectService;
+    private final ProjectService projectService;
     private final TagService tagService;
+    private final CommentService commentService;
 
 
-    public ProjectController(ProjectService projectService, UserAccountDetailsService userAccountDetailsService, TagService tagService) {
+    public ProjectController(ProjectService projectService, UserAccountDetailsService userAccountDetailsService, TagService tagService, CommentService commentService) {
         this.projectService = projectService;
         this.userAccountDetailsService = userAccountDetailsService;
         this.tagService = tagService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/users/{userId}/projects")
@@ -48,8 +52,10 @@ public class ProjectController {
         Project project = projectService.getProjectById(id);
         if (project != null) {
             List<Tag> tags = project.getTags();
+            List<Comment> comments = commentService.getAllComments(project);
             model.addAttribute("project", project);
             model.addAttribute("tags", tags);
+            model.addAttribute("comments", comments);
             return "project/project";
         } else {
             return "error";

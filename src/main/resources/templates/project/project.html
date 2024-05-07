@@ -15,7 +15,8 @@
 <main>
     <div th:if="${#authentication.name == project.owner.username}">
         <a class="button_form" th:href="@{/project/edit/{id}(id=${project.id})}">Upravit</a>
-        <form action="#" th:action="@{/project/delete/{id}(id=${project.id})}" th:method="get" onsubmit="return confirm('Are you sure you want to delete this project?');">
+        <form action="#" th:action="@{/project/delete/{id}(id=${project.id})}" th:method="get"
+              onsubmit="return confirm('Are you sure you want to delete this project?');">
             <input type="submit" value="Delete">
         </form>
     </div>
@@ -32,15 +33,30 @@
 
         <section id="boxes">
             <div class="container">
+                <h3>Tagy</h3>
                 <div class="box" th:each="tag : ${tags}">
-                    <a th:href="@{/tags/{tagId}(tagId=*{tag.id})}"><h3 th:text="*{tag.name}"></h3></a>
+
+<!--                    <a th:href="@{/tags/{tagId}(tagId=*{tag.id})}">-->
+                        <h4 th:text="*{tag.name}"></h4>
+<!--                    </a>-->
+                </div>
+                <a sec:authorize="isAuthenticated" class="button_form"
+                   th:href="@{/projects/{projectId}/comments/create(projectId=*{project.id})}">Přidat komentář</a>
+                <h3>Komentáře</h3>
+                <div class="box" th:each="comment : ${comments}">
+                    <h4 th:text="*{comment.owner.username}"></h4>
+                    <p th:text="*{comment.value}"></p>
+                    <form th:if="${#authentication.name == comment.owner.username}" action="#" th:action="@{/projects/{projectId}/comments/delete/{commentId}(projectId=${project.id}, commentId=${comment.id})}" th:method="get"
+                          onsubmit="return confirm('Are you sure you want to delete this project?');">
+                        <input type="submit" value="Delete">
+                    </form>
                 </div>
             </div>
         </section>
-
         <aside id="sidebar">
             <div class="dark">
-                <a th:href="@{/profile/{profileId}(profileId=*{project.owner.id})}"><h3 th:text="${project.owner.username}"></h3></a>
+                <a th:href="@{/profile/{profileId}(profileId=*{project.owner.id})}"><h3
+                        th:text="${project.owner.username}"></h3></a>
                 <p>Status of user</p>
             </div>
             <div class="dark">
