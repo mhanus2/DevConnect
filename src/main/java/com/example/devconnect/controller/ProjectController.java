@@ -1,13 +1,7 @@
 package com.example.devconnect.controller;
 
-import com.example.devconnect.model.Comment;
-import com.example.devconnect.model.Project;
-import com.example.devconnect.model.Tag;
-import com.example.devconnect.model.UserAccount;
-import com.example.devconnect.service.CommentService;
-import com.example.devconnect.service.ProjectService;
-import com.example.devconnect.service.TagService;
-import com.example.devconnect.service.UserAccountDetailsService;
+import com.example.devconnect.model.*;
+import com.example.devconnect.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,13 +22,15 @@ public class ProjectController {
     private final ProjectService projectService;
     private final TagService tagService;
     private final CommentService commentService;
+    private final ImageService imageService;
 
 
-    public ProjectController(ProjectService projectService, UserAccountDetailsService userAccountDetailsService, TagService tagService, CommentService commentService) {
+    public ProjectController(ProjectService projectService, UserAccountDetailsService userAccountDetailsService, TagService tagService, CommentService commentService, ImageService imageService) {
         this.projectService = projectService;
         this.userAccountDetailsService = userAccountDetailsService;
         this.tagService = tagService;
         this.commentService = commentService;
+        this.imageService = imageService;
     }
 
     @GetMapping("/users/{userId}/projects")
@@ -53,9 +49,11 @@ public class ProjectController {
         if (project != null) {
             List<Tag> tags = project.getTags();
             List<Comment> comments = commentService.getAllComments(project);
+            List<Image> images = imageService.getAllImages(project);
             model.addAttribute("project", project);
             model.addAttribute("tags", tags);
             model.addAttribute("comments", comments);
+            model.addAttribute("images", images);
             return "project/project";
         } else {
             return "error";
