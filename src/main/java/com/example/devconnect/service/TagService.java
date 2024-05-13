@@ -17,8 +17,8 @@ public class TagService {
         this.popularTagRepository = popularTagRepository;
     }
 
-    public Tag createSkill(Tag tag) {
-        return tagRepository.save(tag);
+    public void createSkill(Tag tag) {
+        tagRepository.save(tag);
     }
 
     public Tag getTag(Integer id) {
@@ -29,8 +29,8 @@ public class TagService {
         return tagRepository.findAll();
     }
 
-    public Tag updateTag(Tag tag) {
-        return tagRepository.save(tag);
+    public void updateTag(Tag tag) {
+        tagRepository.save(tag);
     }
 
     public void delete(Integer id) {

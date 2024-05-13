@@ -1,6 +1,5 @@
 package com.example.devconnect.service;
 
-import com.example.devconnect.model.Comment;
 import com.example.devconnect.model.Image;
 import com.example.devconnect.model.Project;
 import com.example.devconnect.repository.ImageRepository;

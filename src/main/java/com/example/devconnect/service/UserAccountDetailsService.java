@@ -15,7 +15,7 @@ public class UserAccountDetailsService implements UserDetailsService {
 
     private final UserAccountRepository repository;
 
-    public UserAccountDetailsService(UserAccountRepository repository, UserAccountRepository userAccountRepository) {
+    public UserAccountDetailsService(UserAccountRepository repository) {
         this.repository = repository;
     }
 

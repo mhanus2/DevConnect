@@ -2,29 +2,25 @@ package com.example.devconnect.controller;
 
 import com.example.devconnect.model.Project;
 import com.example.devconnect.model.Skill;
-import com.example.devconnect.model.Tag;
 import com.example.devconnect.model.UserAccount;
 import com.example.devconnect.service.ProjectService;
 import com.example.devconnect.service.SkillService;
-import com.example.devconnect.service.TagService;
 import com.example.devconnect.service.UserAccountDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
-import java.util.Optional;
 import java.util.List;
+import java.util.Optional;
 
 
 @Controller
@@ -43,7 +39,7 @@ public class UserAccountController {
     }
 
     @GetMapping("/login")
-    public String login(Model model) {
+    public String login() {
         return "userAccount/login";
     }
 

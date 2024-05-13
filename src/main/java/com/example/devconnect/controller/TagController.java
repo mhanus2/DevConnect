@@ -89,7 +89,7 @@ public class TagController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteTag(Model model, Principal principal, @PathVariable Integer id) {
+    public String deleteTag(Principal principal, @PathVariable Integer id) {
         if (principal != null) {
             if (userAccountDetailsService.getUserByUsername(principal.getName()).get().isAdmin()) {
                 tagService.delete(id);

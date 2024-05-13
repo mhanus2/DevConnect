@@ -2,7 +2,6 @@ package com.example.devconnect.repository;
 
 import com.example.devconnect.model.Comment;
 import com.example.devconnect.model.Project;
-import com.example.devconnect.model.UserAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;

@@ -6,7 +6,6 @@ import com.example.devconnect.service.ProjectService;
 import com.example.devconnect.service.UserAccountDetailsService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 

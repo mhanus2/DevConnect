@@ -69,7 +69,7 @@ VALUES ('image1.jpg', 1),
        ('image3.jpg', 2),
        ('image4.jpg', 3),
        ('image5.jpg', 3),
-       ('image6.jpg', 3),s
+       ('image6.jpg', 3),
        ('image7.jpg', 4),
        ('image8.jpg', 5),
        ('image9.jpg', 5),

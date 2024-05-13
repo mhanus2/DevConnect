@@ -31,8 +31,8 @@ public class ProjectService {
         projectRepository.save(project);
     }
 
-    public Project editProject(Project project) {
-        return projectRepository.save(project);
+    public void editProject(Project project) {
+        projectRepository.save(project);
     }
 
     public void deleteProject(Integer id) {
