@@ -36,8 +36,6 @@ public class ImageService {
                 Files.deleteIfExists(Paths.get(uploadDir + image.getFilePath()));
             } catch (IOException e) {
                 e.printStackTrace();
-                // todo - neco
-                // Handle the exception, e.g. log the error or throw a custom exception
             }
         }
 

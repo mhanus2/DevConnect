@@ -44,10 +44,10 @@
                         th:text="${project.owner.username}"></h3></a>
                 <p th:text="${project.owner.firstName}+' '+${project.owner.lastName}"></p>
             </div>
-            <div th:if="${images != null && !images.isEmpty()}" id="gallery">
+            <div id="gallery">
                 <a th:if="${#authentication.name == project.owner.username} or ${isAdmin}" class="button_form"
                    th:href="@{/projects/{id}/images/create(id=${project.id})}">Přidat obrázek</a>
-                <div class="container">
+                <div th:if="${images != null && !images.isEmpty()}" class="container">
                     <div class="mySlides" th:each="image, stat : ${images}">
                         <div class="numbertext" th:text="${stat.index + 1} + ' / ' + ${images.size()}"></div>
                         <img th:src="@{/media/{image}(image=*{image.filePath})}" alt="">
