@@ -8,11 +8,13 @@ import com.example.devconnect.service.SkillService;
 import com.example.devconnect.service.UserAccountDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +27,6 @@ import java.util.Optional;
 
 @Controller
 public class UserAccountController {
-
     private final UserAccountDetailsService userAccountDetailsService;
     private final SkillService skillService;
     private final ProjectService projectService;
@@ -50,7 +51,11 @@ public class UserAccountController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute UserAccount user) {
+    public String register(@Valid @ModelAttribute UserAccount user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/register";
+        }
+
         user.setRole("USER");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userAccountDetailsService.saveUser(user);
@@ -71,7 +76,7 @@ public class UserAccountController {
             model.addAttribute("skills", skills);
             return "userAccount/profile";
         } else {
-            return "error";
+            return "error/404";
         }
     }
 
@@ -94,7 +99,7 @@ public class UserAccountController {
     }
 
     @PostMapping("profiles/edit/{id}")
-    public String saveUser(@ModelAttribute UserAccount user, Principal principal) {
+    public String saveUser(@Valid @ModelAttribute UserAccount user, Principal principal, BindingResult bindingResult) {
         if (principal != null) {
             Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
             Optional<UserAccount> existingUser = userAccountDetailsService.getUserById(user.getId());
@@ -102,6 +107,9 @@ public class UserAccountController {
             if (existingUser.isPresent()) {
                 UserAccount currentUser = existingUser.get();
                 if (currentUser.getUsername().equals(loggedUser.get().getUsername()) || loggedUser.get().isAdmin()) {
+                    if (bindingResult.hasErrors()) {
+                        return "redirect:/projects/edit/" + user.getId();
+                    }
                     user.setUsername(currentUser.getUsername());
                     user.setPassword(currentUser.getPassword());
                     user.setRole(currentUser.getRole());

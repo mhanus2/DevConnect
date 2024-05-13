@@ -4,8 +4,10 @@ import com.example.devconnect.model.Tag;
 import com.example.devconnect.model.UserAccount;
 import com.example.devconnect.service.TagService;
 import com.example.devconnect.service.UserAccountDetailsService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -46,16 +48,21 @@ public class TagController {
                 model.addAttribute("tag", new Tag());
                 model.addAttribute("isAdmin", loggedUser.isAdmin());
                 model.addAttribute("userId", loggedUser.getId());
-                return "tag/createTag";
+                model.addAttribute("edit", false);
+                return "tag/form";
             }
         }
         return "error";
     }
 
     @PostMapping("/create")
-    public String createTag(@ModelAttribute Tag tag, Principal principal) {
+    public String createTag(@Valid @ModelAttribute Tag tag, BindingResult bindingResult, Principal principal) {
         if (principal != null) {
             if (userAccountDetailsService.getUserByUsername(principal.getName()).get().isAdmin()) {
+                if (bindingResult.hasErrors()) {
+                    return "redirect:/create";
+                }
+
                 tagService.createSkill(tag);
                 return "redirect:/tags";
             }
@@ -71,16 +78,21 @@ public class TagController {
                 model.addAttribute("tag", tagService.getTag(id));
                 model.addAttribute("isAdmin", loggedUser.isAdmin());
                 model.addAttribute("userId", loggedUser.getId());
-                return "tag/editTag";
+                model.addAttribute("edit", true);
+                return "tag/form";
             }
         }
         return "error";
     }
 
     @PostMapping("/edit/{id}")
-    public String showEditForm(@ModelAttribute Tag tag, Principal principal) {
+    public String showEditForm(@Valid @ModelAttribute Tag tag, BindingResult bindingResult, Principal principal) {
         if (principal != null) {
             if (userAccountDetailsService.getUserByUsername(principal.getName()).get().isAdmin()) {
+                if (bindingResult.hasErrors()) {
+                    return "redirect:/edit/" + tag.getId();
+                }
+
                 tagService.updateTag(tag);
                 return "redirect:/tags";
             }

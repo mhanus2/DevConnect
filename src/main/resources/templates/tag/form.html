@@ -1,30 +1,22 @@
 <!DOCTYPE html>
 <html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
 <head th:replace="~{components/head :: head}"></head>
-
-
 <body>
 <header th:replace="~{components/header :: header}"></header>
 <main>
     <div id="main" class="container">
         <article id="main-col">
             <div id="topics">
-                <h1>Přidat dovednost</h1>
-                <form action="#" th:action="@{/profiles/{profileId}/skills/create(profileId=${userId})}"
-                      th:object="${skill}" method="post">
+                <h1 th:text="${edit} ? 'Upravit tag' : 'Vytvořit tag'"></h1>
+                <form th:action="${edit} ? '/tags/edit/' + ${tag.id} : '/tags/create'" th:object="${tag}" method="post">
                     <label for="name">Název:</label><br>
                     <input type="text" id="name" th:field="*{name}" required><br>
-                    <label for="detail">Detail:</label><br>
-                    <input type="text" id="detail" th:field="*{detail}"><br>
-                    <input class="button_form" type="submit" value="Uložit">
+                    <input class="button_form" type="submit" value="Vytvořit">
                 </form>
             </div>
         </article>
     </div>
 </main>
 <footer th:replace="~{components/footer :: footer}"></footer>
-
 </body>
-
 </html>

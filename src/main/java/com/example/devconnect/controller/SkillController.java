@@ -4,8 +4,10 @@ import com.example.devconnect.model.Skill;
 import com.example.devconnect.model.UserAccount;
 import com.example.devconnect.service.SkillService;
 import com.example.devconnect.service.UserAccountDetailsService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,18 +34,23 @@ public class SkillController {
             model.addAttribute("skill", new Skill());
             model.addAttribute("userId", profileId);
             model.addAttribute("isAdmin", userAccountDetailsService.getUserByUsername(principal.getName()).get().isAdmin());
-            return "skill/createSkill";
+            model.addAttribute("edit", false);
+            return "skill/form";
         }
         return "error";
     }
 
     @PostMapping("profiles/{profileId}/skills/create")
-    public String createSkill(@ModelAttribute Skill skill, Principal principal, @PathVariable Integer profileId) {
+    public String createSkill(@Valid @ModelAttribute Skill skill, BindingResult bindingResult, Principal principal, @PathVariable Integer profileId) {
         if (principal != null) {
             Optional<UserAccount> optionalOwner = userAccountDetailsService.getUserById(profileId);
             Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
             if (optionalOwner.isPresent()) {
                 if (loggedUser.get() == optionalOwner.get() || loggedUser.get().isAdmin()) {
+                    if (bindingResult.hasErrors()) {
+                        return String.format("redirect:profiles/%s/skills/create", profileId);
+                    }
+
                     UserAccount owner = optionalOwner.get();
                     skill.setOwner(owner);
                     skillService.createSkill(skill);
@@ -64,19 +71,23 @@ public class SkillController {
                 model.addAttribute("skill", skill);
                 model.addAttribute("userId", profileId);
                 model.addAttribute("isAdmin", user.get().isAdmin());
-                return "skill/editSkill";
+                model.addAttribute("edit", true);
+                return "skill/form";
             }
         }
         return "error";
     }
 
     @PostMapping("profiles/{profileId}/skills/edit/{id}")
-    public String updateSkill(@PathVariable Integer id, @ModelAttribute Skill skill, Principal principal) {
+    public String updateSkill(@PathVariable Integer profileId, @PathVariable Integer id,@Valid @ModelAttribute Skill skill, BindingResult bindingResult, Principal principal) {
         if (principal != null) {
             Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(principal.getName());
             Skill existingSkill = skillService.getSkill(skill.getId());
             UserAccount owner = existingSkill.getOwner();
             if (Objects.equals(owner.getUsername(), principal.getName()) || user.get().isAdmin()) {
+                if (bindingResult.hasErrors()) {
+                    return String.format("redirect:profiles/%s/skills/edit/", profileId) + id;
+                }
                 skill.setOwner(owner);
                 skillService.updateSkill(skill);
                 return "redirect:/profiles/" + owner.getId();

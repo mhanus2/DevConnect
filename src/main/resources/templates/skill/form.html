@@ -7,11 +7,13 @@
     <div id="main" class="container">
         <article id="main-col">
             <div id="topics">
-                <h1>Upravit tag</h1>
-                <form action="#" th:action="@{/tags/edit/{id}(id=${tag.id})}" th:object="${tag}" method="post">
-                    <input type="hidden" th:field="*{id}">
-                    <label for="title">Název:</label><br>
-                    <input type="text" id="title" th:field="*{name}" required><br>
+                <h1 th:text="${edit} ? 'Upravit dovednost' : 'Přidat dovednost'"></h1>
+                <form th:action="${edit} ? '/profiles/' + ${userId} + '/skills/edit/' + ${skill.id} : '/profiles/' + ${userId} + '/skills/create'"
+                      th:object="${skill}" method="post">
+                    <label for="name">Název:</label><br>
+                    <input type="text" id="name" th:field="*{name}" required><br>
+                    <label for="detail">Detail:</label><br>
+                    <input type="text" id="detail" th:field="*{detail}"><br>
                     <input class="button_form" type="submit" value="Uložit">
                 </form>
             </div>

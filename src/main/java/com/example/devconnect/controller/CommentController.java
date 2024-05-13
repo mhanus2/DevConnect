@@ -6,8 +6,10 @@ import com.example.devconnect.model.UserAccount;
 import com.example.devconnect.service.CommentService;
 import com.example.devconnect.service.ProjectService;
 import com.example.devconnect.service.UserAccountDetailsService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,12 +46,15 @@ public class CommentController {
     }
 
     @PostMapping("/projects/{id}/comments/create")
-    public String createComment(@ModelAttribute Comment comment, Principal principal, @PathVariable Integer id) {
+    public String createComment(@Valid @ModelAttribute Comment comment, BindingResult bindingResult, Principal principal, @PathVariable Integer id) {
         if (principal != null) {
             Optional<UserAccount> userAccount = userAccountDetailsService.getUserByUsername(principal.getName());
             Project project = projectService.getProjectById(id);
 
             if (userAccount.isPresent()) {
+                if (bindingResult.hasErrors()) {
+                    return "redirect:/projects/{id}/comments/create" + id;
+                }
                 UserAccount owner = userAccount.get();
                 commentService.createComment(id, owner.getId(), comment.getValue());
                 return "redirect:/projects/" + project.getId();

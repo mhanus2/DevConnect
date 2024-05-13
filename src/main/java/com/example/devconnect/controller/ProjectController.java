@@ -2,13 +2,14 @@ package com.example.devconnect.controller;
 
 import com.example.devconnect.model.*;
 import com.example.devconnect.service.*;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
@@ -36,8 +37,7 @@ public class ProjectController {
         List<Project> projects = projectService.getAllProjects();
         model.addAttribute("projects", projects.reversed());
         if (principal != null) {
-            String username = principal.getName();
-            Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(username);
+            Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(principal.getName());
             user.ifPresent(userAccount -> model.addAttribute("userId", userAccount.getId()));
             user.ifPresent(userAccount -> model.addAttribute("isAdmin", userAccount.isAdmin()));
         }
@@ -52,11 +52,9 @@ public class ProjectController {
             List<Comment> comments = commentService.getAllComments(project);
             List<Image> images = imageService.getAllImages(project);
             if (principal != null) {
-                String username = principal.getName();
-                Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(username);
+                Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(principal.getName());
+                user.ifPresent(userAccount -> model.addAttribute("userId", userAccount.getId()));
                 user.ifPresent(userAccount -> model.addAttribute("isAdmin", userAccount.isAdmin()));
-                model.addAttribute("userId", user.get().getId());
-                model.addAttribute("isAdmin", user.get().isAdmin());
             }
             model.addAttribute("project", project);
             model.addAttribute("tags", tags);
@@ -64,92 +62,112 @@ public class ProjectController {
             model.addAttribute("images", images);
             return "project/project";
         } else {
-            return "error";
+            return "error/404";
         }
     }
 
     @GetMapping("/projects/create")
     public String showCreateProjectForm(Model model, Principal principal) {
         if (principal != null) {
-            model.addAttribute("project", new Project());
             List<Tag> tags = tagService.getAllTags();
+            model.addAttribute("project", new Project());
             model.addAttribute("tags", tags);
-            model.addAttribute("userId", userAccountDetailsService.getUserByUsername(principal.getName()).get().getId());
-            model.addAttribute("isAdmin", userAccountDetailsService.getUserByUsername(principal.getName()).get().isAdmin());
-            return "project/createProject";
+            model.addAttribute("edit", false);
+            Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(principal.getName());
+            user.ifPresent(userAccount -> model.addAttribute("userId", userAccount.getId()));
+            user.ifPresent(userAccount -> model.addAttribute("isAdmin", userAccount.isAdmin()));
+            return "project/form";
         }
-        return "error";
+        return "error/401";
     }
 
     @PostMapping("/projects/create")
-    public String saveProject(@ModelAttribute Project project, Principal principal) {
+    public String saveProject(@Valid @ModelAttribute Project project, BindingResult bindingResult, Principal principal) {
         if (principal != null) {
-            Optional<UserAccount> optionalOwner = userAccountDetailsService.getUserByUsername(principal.getName());
-            if (optionalOwner.isPresent()) {
-                UserAccount owner = optionalOwner.get();
-                project.setOwner(owner);
+            Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(principal.getName());
+            if (user.isPresent()) {
+                if (bindingResult.hasErrors()) {
+                    return "redirect:/projects/create";
+                }
+
+                project.setOwner(user.get());
                 projectService.saveProject(project);
-                Integer projectId = project.getId();
-                return "redirect:/projects/" + projectId;
+                return "redirect:/projects/" + project.getId();
             }
         }
-        return "error";
+        return "error/401";
     }
 
     @GetMapping("/projects/edit/{id}")
-    public String showEditForm(@PathVariable("id") Integer id, Model model, Principal principal) {
+    public String showEditForm(@Valid @PathVariable("id") Integer id, Model model, Principal principal) {
         if (principal != null) {
             Project project = projectService.getProjectById(id);
             UserAccount owner = project.getOwner();
             Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(principal.getName());
 
-            if (Objects.equals(owner.getUsername(), principal.getName()) || user.get().isAdmin()) {
-                model.addAttribute("project", project);
-                List<Tag> tags = tagService.getAllTags();
-                model.addAttribute("tags", tags);
-                model.addAttribute("userId", user.get().getId());
-                model.addAttribute("isAdmin", user.get().isAdmin());
-                return "project/editProject";
+            if (user.isPresent()) {
+                if (Objects.equals(owner.getUsername(), user.get().getUsername()) || user.get().isAdmin()) {
+                    List<Tag> tags = tagService.getAllTags();
+                    model.addAttribute("project", project);
+                    model.addAttribute("tags", tags);
+                    model.addAttribute("userId", user.get().getId());
+                    model.addAttribute("isAdmin", user.get().isAdmin());
+                    model.addAttribute("edit", true);
+                    return "project/form";
+                } else {
+                    return "error/403";
+                }
             }
         }
-        return "error";
+        return "error/401";
     }
 
     @PostMapping("/projects/edit")
-    public String editProject(@ModelAttribute Project project, Principal principal) {
+    public String editProject(@Valid @ModelAttribute Project project, BindingResult bindingResult, Principal principal) {
         if (principal != null) {
             Project existingProject = projectService.getProjectById(project.getId());
             UserAccount owner = existingProject.getOwner();
             Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(principal.getName());
 
-            if (Objects.equals(owner.getUsername(), principal.getName()) || user.get().isAdmin()) {
-                project.setOwner(owner);
-                projectService.editProject(project);
-                return "redirect:/projects/" + project.getId();
+            if (user.isPresent()) {
+                if (Objects.equals(owner.getUsername(), principal.getName()) || user.get().isAdmin()) {
+                    if (bindingResult.hasErrors()) {
+                        return "redirect:/projects/edit/" + project.getId();
+                    }
+
+                    project.setOwner(owner);
+                    projectService.editProject(project);
+                    return "redirect:/projects/" + project.getId();
+                } else {
+                    return "error/403";
+                }
             }
         }
-        return "error";
+        return "error/401";
     }
 
     @GetMapping("/projects/delete/{id}")
-    public String deleteProject(@PathVariable Integer id, Principal principal, RedirectAttributes redirectAttributes) {
+    public String deleteProject(@PathVariable Integer id, Principal principal) {
         if (principal != null) {
             Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(principal.getName());
-
             Project project = projectService.getProjectById(id);
             UserAccount owner = project.getOwner();
-            if (Objects.equals(owner.getUsername(), principal.getName()) || user.get().isAdmin()) {
-                for (Image image : imageService.getAllImages(project)) {
-                    imageService.delete(image.getId());
+
+            if (user.isPresent()) {
+                if (Objects.equals(owner.getUsername(), principal.getName()) || user.get().isAdmin()) {
+                    for (Image image : imageService.getAllImages(project)) {
+                        imageService.delete(image.getId());
+                    }
+                    for (Comment comment : commentService.getAllComments(project)) {
+                        commentService.deleteComment(comment.getId());
+                    }
+                    projectService.deleteProject(id);
+                    return "redirect:/";
+                } else {
+                    return "error/403";
                 }
-                for (Comment comment : commentService.getAllComments(project)) {
-                    commentService.deleteComment(comment.getId());
-                }
-                projectService.deleteProject(id);
-                redirectAttributes.addFlashAttribute("successMessage", "Pojekt úspěšně odstraněn");
-                return "redirect:/";
             }
         }
-        return "error";
+        return "error/401";
     }
 }

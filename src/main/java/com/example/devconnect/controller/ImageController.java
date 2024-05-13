@@ -6,9 +6,11 @@ import com.example.devconnect.model.UserAccount;
 import com.example.devconnect.service.ImageService;
 import com.example.devconnect.service.ProjectService;
 import com.example.devconnect.service.UserAccountDetailsService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

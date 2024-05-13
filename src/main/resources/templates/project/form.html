@@ -7,8 +7,9 @@
     <div id="main" class="container">
         <article id="main-col">
             <div id="topics">
-                <h1>Vytvořit projekt</h1>
-                <form action="#" th:action="@{/projects/create}" th:object="${project}" method="post">
+                <h1 th:text="${edit} ? 'Upravit projekt' : 'Vytvořit projekt'"></h1>
+                <form th:action="${edit} ? '/projects/edit' : '/projects/create'" th:object="${project}" method="post">
+                    <input type="hidden" th:field="*{id}" readonly>
                     <label for="title">Název:</label><br>
                     <input type="text" id="title" th:field="*{title}" required><br>
                     <label for="description">Popis:</label><br>

@@ -74,5 +74,3 @@ VALUES ('image1.jpg', 1),
        ('image8.jpg', 5),
        ('image9.jpg', 5),
        ('image10.jpg', 3);
-
-
