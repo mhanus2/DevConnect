@@ -33,11 +33,12 @@ public class SkillController {
         if (principal != null) {
             model.addAttribute("skill", new Skill());
             model.addAttribute("userId", profileId);
-            model.addAttribute("isAdmin", userAccountDetailsService.getUserByUsername(principal.getName()).get().isAdmin());
+            Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(principal.getName());
+            user.ifPresent(userAccount -> model.addAttribute("isAdmin", userAccount.isAdmin()));
             model.addAttribute("edit", false);
             return "skill/form";
         }
-        return "error";
+        return "error/401";
     }
 
     @PostMapping("profiles/{profileId}/skills/create")
@@ -45,20 +46,23 @@ public class SkillController {
         if (principal != null) {
             Optional<UserAccount> optionalOwner = userAccountDetailsService.getUserById(profileId);
             Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
-            if (optionalOwner.isPresent()) {
+            if (optionalOwner.isPresent() && loggedUser.isPresent()) {
                 if (loggedUser.get() == optionalOwner.get() || loggedUser.get().isAdmin()) {
                     if (bindingResult.hasErrors()) {
                         return String.format("redirect:profiles/%s/skills/create", profileId);
                     }
-
                     UserAccount owner = optionalOwner.get();
                     skill.setOwner(owner);
                     skillService.createSkill(skill);
                     return "redirect:/profiles/" + owner.getId();
+                } else {
+                    return "error/403";
                 }
+            } else {
+                return "error/404";
             }
         }
-        return "error";
+        return "error/401";
     }
 
     @GetMapping("profiles/{profileId}/skills/edit/{id}")
@@ -67,47 +71,61 @@ public class SkillController {
             Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(principal.getName());
             Skill skill = skillService.getSkill(id);
             UserAccount owner = skill.getOwner();
-            if (Objects.equals(owner.getUsername(), principal.getName()) || user.get().isAdmin()) {
-                model.addAttribute("skill", skill);
-                model.addAttribute("userId", profileId);
-                model.addAttribute("isAdmin", user.get().isAdmin());
-                model.addAttribute("edit", true);
-                return "skill/form";
+            if (user.isPresent()) {
+                if (Objects.equals(owner.getUsername(), principal.getName()) || user.get().isAdmin()) {
+                    model.addAttribute("skill", skill);
+                    model.addAttribute("userId", profileId);
+                    model.addAttribute("isAdmin", user.get().isAdmin());
+                    model.addAttribute("edit", true);
+                    return "skill/form";
+                } else {
+                    return "error/403";
+                }
             }
         }
-        return "error";
+        return "error/401";
     }
 
     @PostMapping("profiles/{profileId}/skills/edit/{id}")
-    public String updateSkill(@PathVariable Integer profileId, @PathVariable Integer id,@Valid @ModelAttribute Skill skill, BindingResult bindingResult, Principal principal) {
+    public String updateSkill(@PathVariable Integer profileId, @PathVariable Integer id, @Valid @ModelAttribute Skill skill, BindingResult bindingResult, Principal principal) {
         if (principal != null) {
             Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(principal.getName());
             Skill existingSkill = skillService.getSkill(skill.getId());
             UserAccount owner = existingSkill.getOwner();
-            if (Objects.equals(owner.getUsername(), principal.getName()) || user.get().isAdmin()) {
-                if (bindingResult.hasErrors()) {
-                    return String.format("redirect:profiles/%s/skills/edit/", profileId) + id;
+
+            if (user.isPresent()) {
+                if (Objects.equals(owner.getUsername(), principal.getName()) || user.get().isAdmin()) {
+                    if (bindingResult.hasErrors()) {
+                        return String.format("redirect:profiles/%s/skills/edit/", profileId) + id;
+                    }
+                    skill.setOwner(owner);
+                    skillService.updateSkill(skill);
+                    return "redirect:/profiles/" + owner.getId();
+                } else {
+                    return "error/403";
                 }
-                skill.setOwner(owner);
-                skillService.updateSkill(skill);
-                return "redirect:/profiles/" + owner.getId();
             }
         }
-        return "error";
+        return "error/401";
     }
 
     @GetMapping("profiles/{profileId}/skills/delete/{id}")
-    public String deleteSkill(@PathVariable Integer id, Principal principal, RedirectAttributes redirectAttributes) {
+    public String deleteSkill(@PathVariable Integer id, Principal principal, RedirectAttributes redirectAttributes, @PathVariable String profileId) {
         if (principal != null) {
             Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(principal.getName());
             Skill skill = skillService.getSkill(id);
             UserAccount owner = skill.getOwner();
-            if (Objects.equals(owner.getUsername(), principal.getName()) || user.get().isAdmin()) {
-                skillService.deleteSkill(id);
-                redirectAttributes.addFlashAttribute("successMessage", "Dovednost úspěšně odstraněna");
-                return "redirect:/profiles/" + owner.getId();
+
+            if (user.isPresent()) {
+                if (Objects.equals(owner.getUsername(), principal.getName()) || user.get().isAdmin()) {
+                    skillService.deleteSkill(id);
+                    redirectAttributes.addFlashAttribute("successMessage", "Dovednost úspěšně odstraněna");
+                    return "redirect:/profiles/" + owner.getId();
+                } else {
+                    return "error/403";
+                }
             }
         }
-        return "error";
+        return "error/401";
     }
 }

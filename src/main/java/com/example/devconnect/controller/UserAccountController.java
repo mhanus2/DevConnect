@@ -86,16 +86,18 @@ public class UserAccountController {
             Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
             Optional<UserAccount> user = userAccountDetailsService.getUserById(id);
 
-            if (user.isPresent()) {
+            if (user.isPresent() && loggedUser.isPresent()) {
                 UserAccount currentUser = user.get();
                 if (currentUser.getUsername().equals(loggedUser.get().getUsername()) || loggedUser.get().isAdmin()) {
                     user.ifPresent(userAccount -> model.addAttribute("userId", userAccount.getId()));
                     model.addAttribute("userAccount", currentUser);
                     return "userAccount/editProfile";
+                } else {
+                    return "error/403";
                 }
             }
         }
-        return "error";
+        return "error/401";
     }
 
     @PostMapping("profiles/edit/{id}")
@@ -104,7 +106,7 @@ public class UserAccountController {
             Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
             Optional<UserAccount> existingUser = userAccountDetailsService.getUserById(user.getId());
 
-            if (existingUser.isPresent()) {
+            if (existingUser.isPresent() && loggedUser.isPresent()) {
                 UserAccount currentUser = existingUser.get();
                 if (currentUser.getUsername().equals(loggedUser.get().getUsername()) || loggedUser.get().isAdmin()) {
                     if (bindingResult.hasErrors()) {
@@ -115,10 +117,12 @@ public class UserAccountController {
                     user.setRole(currentUser.getRole());
                     userAccountDetailsService.saveUser(user);
                     return "redirect:/profiles/" + user.getId();
+                } else {
+                    return "error/403";
                 }
             }
         }
-        return "error";
+        return "error/401";
     }
 
     @GetMapping("/profiles/{userId}/projects")
@@ -131,8 +135,10 @@ public class UserAccountController {
 
         if (principal != null) {
             Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
-            model.addAttribute("isAdmin", loggedUser.get().isAdmin());
-            model.addAttribute("userId", loggedUser.get().getId());
+            if (loggedUser.isPresent()) {
+                model.addAttribute("isAdmin", loggedUser.get().isAdmin());
+                model.addAttribute("userId", loggedUser.get().getId());
+            }
         }
         return "project/projects";
     }
@@ -142,16 +148,17 @@ public class UserAccountController {
         if (principal != null) {
             Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
             Optional<UserAccount> user = userAccountDetailsService.getUserById(id);
-            if (user.isPresent()) {
+            if (user.isPresent() && loggedUser.isPresent()) {
                 UserAccount currentUser = user.get();
                 if (currentUser.getUsername().equals(loggedUser.get().getUsername()) || loggedUser.get().isAdmin()) {
                     new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-
                     userAccountDetailsService.deleteUser(currentUser.getId());
                     return "redirect:/";
+                } else {
+                    return "error/403";
                 }
             }
         }
-        return "error";
+        return "error/401";
     }
 }

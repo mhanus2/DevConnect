@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/tags")
@@ -27,87 +28,113 @@ public class TagController {
     @GetMapping("")
     public String showTags(Model model, Principal principal) {
         if (principal != null) {
-            UserAccount loggedUser = userAccountDetailsService.getUserByUsername(principal.getName()).get();
-            if (loggedUser.isAdmin()) {
-                List<Tag> tags = tagService.getAllTags();
-                model.addAttribute("tags", tags);
-                model.addAttribute("userId", loggedUser.getId());
-                model.addAttribute("isAdmin", loggedUser.isAdmin());
-                model.addAttribute("popularTags", tagService.getPopularTags());
-                return "tag/tags";
+            Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
+            if (loggedUser.isPresent()) {
+                if (loggedUser.get().isAdmin()) {
+                    List<Tag> tags = tagService.getAllTags();
+                    model.addAttribute("tags", tags);
+                    model.addAttribute("userId", loggedUser.get().getId());
+                    model.addAttribute("isAdmin", loggedUser.get().isAdmin());
+                    model.addAttribute("popularTags", tagService.getPopularTags());
+                    return "tag/tags";
+                } else {
+                    return "error/403";
+                }
             }
         }
-        return "error";
+        return "error/401";
     }
 
     @GetMapping("/create")
     public String showCreateForm(Model model, Principal principal) {
         if (principal != null) {
-            UserAccount loggedUser = userAccountDetailsService.getUserByUsername(principal.getName()).get();
-            if (loggedUser.isAdmin()) {
-                model.addAttribute("tag", new Tag());
-                model.addAttribute("isAdmin", loggedUser.isAdmin());
-                model.addAttribute("userId", loggedUser.getId());
-                model.addAttribute("edit", false);
-                return "tag/form";
+            Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
+            if (loggedUser.isPresent()) {
+                if (loggedUser.get().isAdmin()) {
+                    model.addAttribute("tag", new Tag());
+                    model.addAttribute("isAdmin", loggedUser.get().isAdmin());
+                    model.addAttribute("userId", loggedUser.get().getId());
+                    model.addAttribute("edit", false);
+                    return "tag/form";
+                } else {
+                    return "error/403";
+                }
             }
         }
-        return "error";
+        return "error/401";
     }
 
     @PostMapping("/create")
     public String createTag(@Valid @ModelAttribute Tag tag, BindingResult bindingResult, Principal principal) {
         if (principal != null) {
-            if (userAccountDetailsService.getUserByUsername(principal.getName()).get().isAdmin()) {
-                if (bindingResult.hasErrors()) {
-                    return "redirect:/create";
-                }
+            Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
+            if (loggedUser.isPresent()) {
+                if (loggedUser.get().isAdmin()) {
+                    if (bindingResult.hasErrors()) {
+                        return "redirect:/create";
+                    }
 
-                tagService.createSkill(tag);
-                return "redirect:/tags";
+                    tagService.createSkill(tag);
+                    return "redirect:/tags";
+                } else {
+                    return "error/403";
+                }
             }
         }
-        return "error";
+        return "error/401";
     }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(Model model, Principal principal, @PathVariable Integer id) {
         if (principal != null) {
-            UserAccount loggedUser = userAccountDetailsService.getUserByUsername(principal.getName()).get();
-            if (loggedUser.isAdmin()) {
-                model.addAttribute("tag", tagService.getTag(id));
-                model.addAttribute("isAdmin", loggedUser.isAdmin());
-                model.addAttribute("userId", loggedUser.getId());
-                model.addAttribute("edit", true);
-                return "tag/form";
+            Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
+            if (loggedUser.isPresent()) {
+                if (loggedUser.get().isAdmin()) {
+                    model.addAttribute("tag", tagService.getTag(id));
+                    model.addAttribute("isAdmin", loggedUser.get().isAdmin());
+                    model.addAttribute("userId", loggedUser.get().getId());
+                    model.addAttribute("edit", true);
+                    return "tag/form";
+                } else {
+                    return "error/403";
+                }
             }
         }
-        return "error";
+        return "error/401";
     }
 
     @PostMapping("/edit/{id}")
     public String showEditForm(@Valid @ModelAttribute Tag tag, BindingResult bindingResult, Principal principal) {
         if (principal != null) {
-            if (userAccountDetailsService.getUserByUsername(principal.getName()).get().isAdmin()) {
-                if (bindingResult.hasErrors()) {
-                    return "redirect:/edit/" + tag.getId();
+            Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
+            if (loggedUser.isPresent()) {
+                if (loggedUser.get().isAdmin()) {
+                    if (bindingResult.hasErrors()) {
+                        return "redirect:/edit/" + tag.getId();
+                    }
+                    tagService.updateTag(tag);
+                    return "redirect:/tags";
+                } else {
+                    return "error/403";
                 }
-
-                tagService.updateTag(tag);
-                return "redirect:/tags";
             }
         }
-        return "error";
+        return "error/401";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteTag(Principal principal, @PathVariable Integer id) {
         if (principal != null) {
-            if (userAccountDetailsService.getUserByUsername(principal.getName()).get().isAdmin()) {
-                tagService.delete(id);
-                return "redirect:/tags";
+            Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
+            if (loggedUser.isPresent()) {
+                if (loggedUser.get().isAdmin()) {
+                    tagService.delete(id);
+                    return "redirect:/tags";
+                } else {
+                    return "error/403";
+                }
             }
         }
-        return "error";
+        return "error/401";
     }
 }

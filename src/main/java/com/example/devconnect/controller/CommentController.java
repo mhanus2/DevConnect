@@ -69,12 +69,17 @@ public class CommentController {
             Comment comment = commentService.getCommentById(commentId);
             UserAccount owner = comment.getOwner();
             Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
-            if (Objects.equals(owner.getUsername(), principal.getName()) || loggedUser.get().isAdmin()) {
-                commentService.deleteComment(commentId);
-                redirectAttributes.addFlashAttribute("successMessage", "Komentář úspěšně odstraněn");
-                return "redirect:/projects/" + projectId;
+
+            if (loggedUser.isPresent()) {
+                if (Objects.equals(owner.getUsername(), principal.getName()) || loggedUser.get().isAdmin()) {
+                    commentService.deleteComment(commentId);
+                    redirectAttributes.addFlashAttribute("successMessage", "Komentář úspěšně odstraněn");
+                    return "redirect:/projects/" + projectId;
+                } else {
+                    return "error/403";
+                }
             }
         }
-        return "error";
+        return "error/401";
     }
 }

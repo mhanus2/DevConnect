@@ -1,43 +1,22 @@
 package com.example.devconnect.service;
 
-import com.example.devconnect.model.*;
-import com.example.devconnect.repository.PopularTagRepository;
-import com.example.devconnect.repository.TagRepository;
+import com.example.devconnect.model.PopularTag;
+import com.example.devconnect.model.Tag;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class TagService {
-    private final TagRepository tagRepository;
-    private final PopularTagRepository popularTagRepository;
+public interface TagService {
+    void createSkill(Tag tag);
 
-    public TagService(TagRepository tagRepository, PopularTagRepository popularTagRepository) {
-        this.tagRepository = tagRepository;
-        this.popularTagRepository = popularTagRepository;
-    }
+    Tag getTag(Integer id);
 
-    public void createSkill(Tag tag) {
-        tagRepository.save(tag);
-    }
+    List<Tag> getAllTags();
 
-    public Tag getTag(Integer id) {
-        return tagRepository.findById(id).orElse(null);
-    }
+    void updateTag(Tag tag);
 
-    public List<Tag> getAllTags() {
-        return tagRepository.findAll();
-    }
+    void delete(Integer id);
 
-    public void updateTag(Tag tag) {
-        tagRepository.save(tag);
-    }
-
-    public void delete(Integer id) {
-        tagRepository.deleteById(id);
-    }
-
-    public List<PopularTag> getPopularTags() {
-        return popularTagRepository.findAll();
-    }
+    List<PopularTag> getPopularTags();
 }

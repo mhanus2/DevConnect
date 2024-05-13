@@ -6,11 +6,9 @@ import com.example.devconnect.model.UserAccount;
 import com.example.devconnect.service.ImageService;
 import com.example.devconnect.service.ProjectService;
 import com.example.devconnect.service.UserAccountDetailsService;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,10 +45,12 @@ public class ImageController {
                     model.addAttribute("userId", loggedUser.get().getId());
                     model.addAttribute("isAdmin", loggedUser.get().isAdmin());
                     return "image/add";
+                } else {
+                    return "error/403";
                 }
             }
         }
-        return "error";
+        return "error/401";
     }
 
     @PostMapping("/projects/{projectId}/images/create")
@@ -92,7 +92,7 @@ public class ImageController {
                 }
             }
         }
-        return "error";
+        return "error/401";
     }
 
     @GetMapping("/projects/{projectId}/images/delete/{imageId}")
@@ -102,12 +102,16 @@ public class ImageController {
             UserAccount owner = project.getOwner();
             Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(principal.getName());
 
-            if (Objects.equals(owner.getUsername(), principal.getName()) || user.get().isAdmin()) {
-                imageService.delete(imageId);
-                return "redirect:/projects/" + projectId;
+            if (user.isPresent()) {
+                if (Objects.equals(owner.getUsername(), principal.getName()) || user.get().isAdmin()) {
+                    imageService.delete(imageId);
+                    return "redirect:/projects/" + projectId;
+                } else {
+                    return "error/403";
+                }
             }
         }
-        return "error";
+        return "error/401";
     }
 
 }

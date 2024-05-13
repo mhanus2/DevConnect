@@ -2,37 +2,19 @@ package com.example.devconnect.service;
 
 import com.example.devconnect.model.Comment;
 import com.example.devconnect.model.Project;
-import com.example.devconnect.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CommentService {
+public interface CommentService {
+    void createComment(Comment comment);
 
-    private final CommentRepository commentRepository;
+    void createComment(Integer projectId, Integer ownerId, String commentText);
 
-    public CommentService(CommentRepository commentRepository) {
-        this.commentRepository = commentRepository;
-    }
+    List<Comment> getAllComments(Project project);
 
-    public void createComment(Comment comment) {
-        commentRepository.save(comment);
-    }
+    Comment getCommentById(Integer commentId);
 
-    public void createComment(Integer projectId, Integer ownerId, String commentText) {
-        commentRepository.addComment(projectId, ownerId, commentText);
-    }
-
-    public List<Comment> getAllComments(Project project) {
-        return commentRepository.findByProject(project);
-    }
-
-    public Comment getCommentById(Integer commentId) {
-        return commentRepository.findById(commentId).get();
-    }
-
-    public void deleteComment(Integer id) {
-        commentRepository.deleteById(id);
-    }
+    void deleteComment(Integer id);
 }

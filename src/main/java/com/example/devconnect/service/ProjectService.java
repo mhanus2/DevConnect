@@ -2,40 +2,21 @@ package com.example.devconnect.service;
 
 import com.example.devconnect.model.Project;
 import com.example.devconnect.model.UserAccount;
-import com.example.devconnect.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ProjectService {
-    private final ProjectRepository projectRepository;
+public interface ProjectService {
+    List<Project> getAllProjects();
 
-    public ProjectService(ProjectRepository projectRepository) {
-        this.projectRepository = projectRepository;
-    }
+    Project getProjectById(Integer id);
 
-    public List<Project> getAllProjects() {
-        return projectRepository.findAll();
-    }
+    List<Project> getProjectsByOwner(UserAccount owner);
 
-    public Project getProjectById(Integer id) {
-        return projectRepository.findById(id).get();
-    }
+    void saveProject(Project project);
 
-    public List<Project> getProjectsByOwner(UserAccount owner) {
-        return projectRepository.findByOwner(owner);
-    }
+    void editProject(Project project);
 
-    public void saveProject(Project project) {
-        projectRepository.save(project);
-    }
-
-    public void editProject(Project project) {
-        projectRepository.save(project);
-    }
-
-    public void deleteProject(Integer id) {
-        projectRepository.deleteById(id);
-    }
+    void deleteProject(Integer id);
 }
