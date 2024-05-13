@@ -1,89 +1,25 @@
 <!DOCTYPE html>
 <html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
-    <title>ForLife</title>
-</head>
-
+<head th:replace="~{components/head :: head}"></head>
 <body>
-<header>
-    <div class="container">
-        <a th:href="@{/}">
-            <div id="logo">
-                <h1>Dev<span class="highlight">Connect</span></h1>
-            </div>
-        </a>
-
-        <span id="burger_menu" onclick="openNav()">&#9776;</span>
-        <nav>
-            <div id="mySidenav" class="sidenav" xmlns:sec="http://www.w3.org/1999/xhtml">
-                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <ul>
-                    <li th:if="${currentPage != 'home'}" class="current"><a th:href="@{/}">Domů</a></li>
-                    <li sec:authorize="isAuthenticated"><a th:href="@{/users/{id}/projects(id=${userId})}">Projekty</a></li>
-                    <li sec:authorize="isAuthenticated"><a th:href="@{/project/create}">Přidat nový projekt</a></li>
-                    <li sec:authorize="isAuthenticated"><a th:href="@{/profile/{id}(id=${userId})}">Profil</a></li>
-                    <li sec:authorize="isAnonymous()"><a th:href="@{/login}">Přihlášení</a></li>
-                    <li sec:authorize="isAnonymous()"><a th:href="@{/register}">Registrace</a></li>
-                    <li sec:authorize="isAuthenticated"><a th:href="@{/logout}">Odhlásit se</a></li>
-                </ul>
-            </div>
-        </nav>
-    </div>
-</header><main>
+<header th:replace="~{components/header :: header}"></header>
+<main>
     <section id="showcase">
         <div class="container">
-            <h2>Zdravý životní styl je základ!</h2>
-            <p>
-                Potřebujete poradit s výživou? Chcete zhubnout? Hledáte způsob, jak zlepšit svůj životní styl?
-                Neváhejte napsat!
-            </p>
+            <h2>Sdílejte svou práci</h2>
+            <p>Vítejte na naší stránce! Zde si můžete projít různé projekty, které s Vámi sdílí ostatní developeři.</p>
         </div>
     </section>
 
     <section id="introduction">
         <div class="container">
-            <h2>S čím Vám pomůžeme?</h2>
-            <div>Zde si můžete vybrat z několika různých témat:</div>
+            <h2>Projekty</h2>
+            <div>Zde je seznam posledních sdílených projektů:</div>
         </div>
     </section>
 
-    <section id="boxes">
-        <div class="container">
-            <div class="box" th:each="project : ${projects}">
-                <a th:href="@{/project/{id}(id=*{project.id})}"><h3 th:text="*{project.title}"></h3></a>
-                <p th:text="*{project.description}"></p>
-            </div>
-        </div>
-    </section>
+    <section th:replace="~{components/projects :: projects}"></section>
 </main>
-<footer>
-    <p>Studentský zápočtový projekt na KTPW1 | 2023 Copyright &copy; Hanuš Martin | Email: hanusma2@uhk.cz |
-        Poslední úprava provedena 20. ledna 2023</p>
-</footer>
-
-<script>
-    function openNav() {
-        document.getElementById("mySidenav").style.width = "100%";
-    }
-
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
-    }
-
-    window.addEventListener('resize', function (event) {
-        if (window.innerWidth > 768) {
-            document.getElementById("mySidenav").style.width = "100%";
-        } else {
-            document.getElementById("mySidenav").style.width = "0";
-        }
-    }, true);
-
-</script>
+<footer th:replace="~{components/footer :: footer}"></footer>
 </body>
-
 </html>

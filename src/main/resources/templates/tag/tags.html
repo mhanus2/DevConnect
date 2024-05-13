@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="~{components/head :: head}"></head>
+<body>
+<header th:replace="~{components/header :: header}"></header>
+<main>
+    <div id="main" class="container">
+        <article id="main-col">
+            <div id="topics">
+                <a sec:authorize="isAuthenticated" class="button_form"
+                   th:href="@{/tags/create}">Vytvořit tag</a>
+                <h1>Tagy</h1>
+                <div class="box" th:each="tag: ${tags}">
+                    <div class="skill-text">
+                        <h3 th:text="*{tag.name}"></h3>
+                    </div>
+                    <div class="skill-buttons">
+                        <a class="button_form" th:href="@{/tags/edit/{id}(id=${tag.id})}">Upravit</a>
+                        <form action="#" th:action="@{/tags/delete/{id}(id=${tag.id})}" th:method="get"
+                              onsubmit="return confirm('Jste si jistí, že chcete odstranit tento tag?');">
+                            <input class="button_form" type="submit" value="Odstranit">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </article>
+        <aside id="sidebar" class="project-sidebar">
+            <div class="light">
+                <h1>Populární tagy (počet využití)</h1>
+                <div class="box" th:each="popularTag: ${popularTags}">
+                    <div class="skill-text">
+                        <h3 th:text="${popularTag.name}"></h3>
+                    </div>
+                    <div class="skill-buttons" id="popularity-count">
+                        <div th:text="${popularTag.tagCount}"></div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</main>
+<footer th:replace="~{components/footer :: footer}"></footer>
+</body>
+</html>

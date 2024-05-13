@@ -28,7 +28,7 @@ public class ImageService {
     }
 
     public void delete(Integer imageId) {
-        String uploadDir = "src/main/resources/media/";
+        String uploadDir = "C:/Users/marti/IdeaProjects/media/";
 
         Image image = imageRepository.findById(imageId).orElse(null);
         if (image != null) {

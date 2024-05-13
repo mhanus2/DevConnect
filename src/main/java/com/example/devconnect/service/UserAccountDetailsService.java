@@ -53,4 +53,8 @@ public class UserAccountDetailsService implements UserDetailsService {
         return repository.findById(id);
     }
 
+    public void deleteUser(Integer userId) {
+        repository.deleteUser(userId);
+    }
+
 }

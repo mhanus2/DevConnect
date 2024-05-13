@@ -1,85 +1,112 @@
 <!DOCTYPE html>
 <html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.w3.org/1999/xhtml">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
-    <title>ForLife | Výživa</title>
-</head>
-
+<head th:replace="~{components/head :: head}"></head>
 <body>
-<header th:include="components/header"></header>
+<header th:replace="~{components/header :: header}"></header>
 <main>
     <div id="main" class="container">
-
         <article id="main-col">
-            <h2 class="page-title" th:text="${project.title}"></h2>
-            <ul id="topics">
-                <li>
-                    <h3 th:text="${project.title}"></h3>
-                    <p th:text="${project.description}"></p>
-                </li>
-            </ul>
-            <div th:if="${#authentication.name == project.owner.username}">
-                <a class="button_form" th:href="@{/project/{id}/images/create(id=${project.id})}">Přidat obrázek</a>
-                <a class="button_form" th:href="@{/project/edit/{id}(id=${project.id})}">Upravit</a>
-                <form action="#" th:action="@{/project/delete/{id}(id=${project.id})}" th:method="get"
-                      onsubmit="return confirm('Are you sure you want to delete this project?');">
-                    <input type="submit" value="Delete">
-                </form>
-            </div>
-        </article>
-
-        <section id="boxes">
-            <div class="container">
-                <h3>Obrázky</h3>
-                <div class="box" th:each="image: ${images}">
-                    <img th:src="@{/media/{image}(image=*{image.filePath})}" alt="">
-                    <div th:if="${#authentication.name == project.owner.username}">
-                        <form action="#" th:action="@{/project/{projectId}/images/delete/{imageId}(projectId=${project.id}, imageId=*{image.id})}" th:method="get"
-                              onsubmit="return confirm('Are you sure you want to delete this image?');">
-                            <input type="submit" value="Delete">
+            <div id="topics">
+                <div>
+                    <div id="project-buttons" th:if="${#authentication.name == project.owner.username} or ${isAdmin}">
+                        <a class="button_form" th:href="@{/projects/edit/{id}(id=${project.id})}">Upravit</a>
+                        <form action="#" th:action="@{/projects/delete/{id}(id=${project.id})}" th:method="get"
+                              onsubmit="return confirm('Jste si jistí, že chcete odstranit tento projekt?');">
+                            <input class="button_form" type="submit" value="Odstranit">
                         </form>
                     </div>
+                    <h2 th:text="${project.title}"></h2>
+                    <p th:text="${project.description}"></p>
                 </div>
-                <h3>Tagy</h3>
-                <div class="box" th:each="tag : ${tags}">
-
-                    <!--                    <a th:href="@{/tags/{tagId}(tagId=*{tag.id})}">-->
-                    <h4 th:text="*{tag.name}"></h4>
-                    <!--                    </a>-->
-                </div>
-                <a sec:authorize="isAuthenticated" class="button_form"
-                   th:href="@{/projects/{projectId}/comments/create(projectId=*{project.id})}">Přidat komentář</a>
-                <h3>Komentáře</h3>
-                <div class="box" th:each="comment : ${comments}">
-                    <h4 th:text="*{comment.owner.username}"></h4>
-                    <p th:text="*{comment.value}"></p>
-                    <form th:if="${#authentication.name == comment.owner.username}" action="#"
-                          th:action="@{/projects/{projectId}/comments/delete/{commentId}(projectId=${project.id}, commentId=${comment.id})}"
-                          th:method="get"
-                          onsubmit="return confirm('Are you sure you want to delete this comment?');">
-                        <input type="submit" value="Delete">
-                    </form>
+                <div class="comments">
+                    <h3>Komentáře</h3>
+                    <div class="box" th:each="comment : ${comments}">
+                        <div>
+                            <a th:href="@{/profiles/{id}(id=${comment.owner.id})}"><h4 th:text="*{comment.owner.username}"></h4></a>
+                            <p th:text="*{comment.value}"></p>
+                        </div>
+                        <form th:if="${#authentication.name == comment.owner.username} or ${isAdmin}" action="#"
+                              th:action="@{/projects/{projectId}/comments/delete/{commentId}(projectId=${project.id}, commentId=${comment.id})}"
+                              th:method="get"
+                              onsubmit="return confirm('Jste si jistí, že chcete odstranit tento komentář?');">
+                            <input class="button_form" type="submit" value="Odstranit">
+                        </form>
+                    </div>
+                    <a sec:authorize="isAuthenticated" class="button_form"
+                       th:href="@{/projects/{projectId}/comments/create(projectId=*{project.id})}">Přidat komentář</a>
                 </div>
             </div>
-        </section>
-        <aside id="sidebar">
-            <div class="dark">
-                <a th:href="@{/profile/{profileId}(profileId=*{project.owner.id})}"><h3
+        </article>
+        <aside id="sidebar" class="project-sidebar">
+            <div class="light">
+                <a th:href="@{/profiles/{profileId}(profileId=*{project.owner.id})}"><h3
                         th:text="${project.owner.username}"></h3></a>
                 <p th:text="${project.owner.firstName}+' '+${project.owner.lastName}"></p>
+            </div>
+            <div th:if="${images != null && !images.isEmpty()}" id="gallery">
+                <a th:if="${#authentication.name == project.owner.username} or ${isAdmin}" class="button_form"
+                   th:href="@{/projects/{id}/images/create(id=${project.id})}">Přidat obrázek</a>
+                <div class="container">
+                    <div class="mySlides" th:each="image, stat : ${images}">
+                        <div class="numbertext" th:text="${stat.index + 1} + ' / ' + ${images.size()}"></div>
+                        <img th:src="@{/media/{image}(image=*{image.filePath})}" alt="">
+                        <div th:if="${#authentication.name == project.owner.username} or ${isAdmin}">
+                            <form action="#"
+                                  th:action="@{/projects/{projectId}/images/delete/{imageId}(projectId=${project.id}, imageId=*{image.id})}"
+                                  th:method="get"
+                                  onsubmit="return confirm('Jste si jistí, že chcete odstranit tento obrázek?');">
+                                <input class="button_form" type="submit" value="Odstranit">
+                            </form>
+                        </div>
+                    </div>
+                    <a class="prev" onclick="plusSlides(-1)">❮</a>
+                    <a class="next" onclick="plusSlides(1)">❯</a>
+                </div>
+            </div>
+            <div th:if="${tags != null && !tags.isEmpty()}" class="light" id="tags">
+                <h2>Tagy</h2>
+                <div class="box" th:each="tag : ${tags}">
+                    <div th:text="*{tag.name}"></div>
+                </div>
             </div>
         </aside>
     </div>
 </main>
-<footer>
-    <p>Studentský zápočtový projekt na KTPW1 | 2023 Copyright &copy; Hanuš Martin | Email: hanusma2@uhk.cz |
-        Poslední úprava provedena 20. ledna 2023</p>
-</footer>
-</body>
+<footer th:replace="~{components/footer :: footer}"></footer>
+<script>
+    let slideIndex = 1;
+    showSlides(slideIndex);
 
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+        showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        let dots = document.getElementsByClassName("demo");
+        let captionText = document.getElementById("caption");
+        if (n > slides.length) {
+            slideIndex = 1
+        }
+        if (n < 1) {
+            slideIndex = slides.length
+        }
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " active";
+        captionText.innerHTML = dots[slideIndex - 1].alt;
+    }
+</script>
+</body>
 </html>

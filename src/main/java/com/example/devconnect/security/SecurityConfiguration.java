@@ -33,19 +33,14 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/", "/project/**", "profile/**", "/register/**").permitAll();
-                    registry.requestMatchers("/admin/**").hasRole("ADMIN");
-                    registry.requestMatchers("/user/**").hasRole("USER");
+                    registry.requestMatchers("/", "/projects/**", "profile/**", "profiles/**", "/register/**", "/images/**", "/js/**", "/css/**", "/webjars/**", "/media/**").permitAll();
                     registry.anyRequest().authenticated();
                 })
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/login")
+                        .permitAll())
                 .logout(logout -> logout.logoutSuccessUrl("/"))
                 .build();
-    }
-
-    @Bean
-    WebSecurityCustomizer configureWebSecurity() {
-        return (web) -> web.ignoring().requestMatchers("/images/**", "/js/**", "/css/**", "/webjars/**");
     }
 
     @Bean

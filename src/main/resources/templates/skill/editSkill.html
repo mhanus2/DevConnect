@@ -1,50 +1,30 @@
 <!DOCTYPE html>
 <html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
-    <title>ForLife</title>
-</head>
+<head th:replace="~{components/head :: head}"></head>
+
 
 <body>
-<header th:include="components/header"></header>
+<header th:replace="~{components/header :: header}"></header>
 <main>
+    <div id="main" class="container">
+        <article id="main-col">
+            <div id="topics">
     <h1>Upravit Dovednost</h1>
-    <form action="#" th:action="@{/skills/edit/{id}(id=${skill.id})}" th:object="${skill}" method="post">
+    <form action="#" th:action="@{/profiles/{profileId}/skills/edit/{id}(profileId=${userId}, id=${skill.id})}" th:object="${skill}" method="post">
         <input type="hidden" id="id" th:field="*{id}">
         <label for="name">Název dovednosti:</label><br>
         <input type="text" id="name" th:field="*{name}" required><br>
         <label for="detail">Detail dovednosti:</label><br>
         <input type="text" id="detail" th:field="*{detail}"><br>
-        <input type="submit" value="Upravit">
+        <input class="button_form" type="submit" value="Upravit">
     </form>
+            </div>
+        </article>
+    </div>
 </main>
-<footer>
-    <p>Studentský zápočtový projekt na KTPW1 | 2023 Copyright &copy; Hanuš Martin | Email: hanusma2@uhk.cz |
-        Poslední úprava provedena 20. ledna 2023</p>
-</footer>
+<footer th:replace="~{components/footer :: footer}"></footer>
 
-<script>
-    function openNav() {
-        document.getElementById("mySidenav").style.width = "100%";
-    }
-
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
-    }
-
-    window.addEventListener('resize', function (event) {
-        if (window.innerWidth > 768) {
-            document.getElementById("mySidenav").style.width = "100%";
-        } else {
-            document.getElementById("mySidenav").style.width = "0";
-        }
-    }, true);
-
-</script>
 </body>
 
 </html>

@@ -1,53 +1,28 @@
 <!DOCTYPE html>
 <html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
-    <title>ForLife</title>
-</head>
-
+<head th:replace="~{components/head :: head}"></head>
 <body>
-<header th:include="components/header"></header>
+<header th:replace="~{components/header :: header}"></header>
 <main>
-    <h1>Create Project</h1>
-    <form action="#" th:action="@{/project/save}" th:object="${project}" method="post">
-        <label for="title">Title:</label><br>
-        <input type="text" id="title" th:field="*{title}" required><br>
-        <label for="description">Description:</label><br>
-        <textarea id="description" th:field="*{description}"></textarea><br>
-        <label for="tags">Tags:</label><br>
-        <select id="tags" th:field="*{tags}" multiple>
-            <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}"></option>
-        </select><br>
-        <input type="submit" value="Submit">
-    </form>
+    <div id="main" class="container">
+        <article id="main-col">
+            <div id="topics">
+                <h1>Vytvořit projekt</h1>
+                <form action="#" th:action="@{/projects/create}" th:object="${project}" method="post">
+                    <label for="title">Název:</label><br>
+                    <input type="text" id="title" th:field="*{title}" required><br>
+                    <label for="description">Popis:</label><br>
+                    <textarea id="description" th:field="*{description}"></textarea><br>
+                    <label for="tags">Tagy:</label><br>
+                    <select id="tags" th:field="*{tags}" multiple>
+                        <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}"></option>
+                    </select><br>
+                    <input class="button_form" type="submit" value="Uložit">
+                </form>
+            </div>
+        </article>
+    </div>
 </main>
-<footer>
-    <p>Studentský zápočtový projekt na KTPW1 | 2023 Copyright &copy; Hanuš Martin | Email: hanusma2@uhk.cz |
-        Poslední úprava provedena 20. ledna 2023</p>
-</footer>
-
-<script>
-    function openNav() {
-        document.getElementById("mySidenav").style.width = "100%";
-    }
-
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
-    }
-
-    window.addEventListener('resize', function (event) {
-        if (window.innerWidth > 768) {
-            document.getElementById("mySidenav").style.width = "100%";
-        } else {
-            document.getElementById("mySidenav").style.width = "0";
-        }
-    }, true);
-
-</script>
+<footer th:replace="~{components/footer :: footer}"></footer>
 </body>
-
 </html>

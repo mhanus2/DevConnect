@@ -1,50 +1,30 @@
 <!DOCTYPE html>
 <html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
-    <title>ForLife</title>
-</head>
-
+<head th:replace="~{components/head :: head}"></head>
 <body>
-<header th:replace="components/header"></header>
+<header th:replace="~{components/header :: header}"></header>
 <main>
-    <form action="#" th:action="@{/register}" th:object="${user}" method="post">
-        <input type="text" th:field="*{username}" placeholder="Username" required>
-        <input type="text" th:field="*{firstName}" placeholder="First Name" required>
-        <input type="text" th:field="*{lastName}" placeholder="Last Name" required>
-        <input type="email" th:field="*{mail}" placeholder="Mail" required>
-        <input type="password" th:field="*{password}" placeholder="Password" required>
-        <input type="submit" value="Register">
-    </form>
-
+    <div id="main" class="container">
+        <article id="main-col">
+            <div id="topics">
+                <h1>Registrace</h1>
+                <form action="#" th:action="@{/register}" th:object="${user}" method="post">
+                    <label for="username">Uživatelské jméno:</label><br>
+                    <input type="text" id="username" th:field="*{username}" placeholder="Username" required><br>
+                    <label for="firstname">Křestní jméno:</label><br>
+                    <input type="text" id="firstname" th:field="*{firstName}" placeholder="First Name" required><br>
+                    <label for="lastname">Příjmení:</label><br>
+                    <input type="text" id="lastname" th:field="*{lastName}" placeholder="Last Name" required><br>
+                    <label for="mail">Mail:</label><br>
+                    <input type="email" id="mail" th:field="*{mail}" placeholder="Mail" required><br>
+                    <label for="password">Heslo:</label><br>
+                    <input type="password" id="password" th:field="*{password}" placeholder="Password" required><br>
+                    <input class="button_form" type="submit" value="Register">
+                </form>
+            </div>
+        </article>
+    </div>
 </main>
-<footer>
-    <p>Studentský zápočtový projekt na KTPW1 | 2023 Copyright &copy; Hanuš Martin | Email: hanusma2@uhk.cz |
-        Poslední úprava provedena 20. ledna 2023</p>
-</footer>
-
-<script>
-    function openNav() {
-        document.getElementById("mySidenav").style.width = "100%";
-    }
-
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
-    }
-
-    window.addEventListener('resize', function (event) {
-        if (window.innerWidth > 768) {
-            document.getElementById("mySidenav").style.width = "100%";
-        } else {
-            document.getElementById("mySidenav").style.width = "0";
-        }
-    }, true);
-
-</script>
+<footer th:replace="~{components/footer :: footer}"></footer>
 </body>
-
 </html>

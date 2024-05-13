@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cs" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="cs">
 <body>
 <header th:fragment="header">
     <div class="container">
@@ -10,7 +10,21 @@
         </a>
 
         <span id="burger_menu" onclick="openNav()">&#9776;</span>
-        <nav th:insert="components/navbar"></nav>
+        <nav>
+            <div id="mySidenav" class="sidenav" xmlns:sec="http://www.w3.org/1999/xhtml">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <ul>
+                    <li><a th:href="@{/}">Domů</a></li>
+                    <li sec:authorize="isAuthenticated"><a th:href="@{/profiles/{id}/projects(id=${userId})}">Projekty</a></li>
+                    <li sec:authorize="isAuthenticated"><a th:href="@{/projects/create}">Přidat nový projekt</a></li>
+                    <li th:if="${isAdmin}"><a th:href="@{/tags}">Tagy</a></li>
+                    <li sec:authorize="isAuthenticated"><a th:href="@{/profiles/{id}(id=${userId})}">Profil</a></li>
+                    <li sec:authorize="isAnonymous()"><a th:href="@{/login}">Přihlášení</a></li>
+                    <li sec:authorize="isAnonymous()"><a th:href="@{/register}">Registrace</a></li>
+                    <li sec:authorize="isAuthenticated"><a th:href="@{/logout}">Odhlásit se</a></li>
+                </ul>
+            </div>
+        </nav>
     </div>
 </header>
 </body>

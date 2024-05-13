@@ -119,4 +119,8 @@ public class UserAccount {
         this.github = github;
     }
 
+    public boolean isAdmin() {
+        return this.role.equals("ADMIN");
+    }
+
 }

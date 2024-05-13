@@ -32,6 +32,13 @@ public class Project {
     )
     private List<Tag> tags;
 
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    private List<Image> images;
+
+    public List<Image> getImages() {
+        return images;
+    }
+
     public Integer getId() {
         return id;
     }

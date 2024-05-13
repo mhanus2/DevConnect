@@ -1,70 +1,62 @@
 <!DOCTYPE html>
 <html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.w3.org/1999/xhtml">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
-    <title>ForLife</title>
-</head>
-
+<head th:replace="~{components/head :: head}"></head>
 <body>
-<header th:include="components/header"></header>
+<header th:replace="~{components/header :: header}"></header>
 <main>
-    <div th:if="${#authentication.name == profile.get().username}">
-        <a class="button_form" th:href="@{/profile/edit/{id}(id=${profile.get().id})}">Upravit</a>
-    </div>
     <div id="main" class="container">
         <article id="main-col">
-            <h2 class="page-title" th:text="${profile.get().username}"></h2>
-            <ul id="topics">
-                <li>
-                    <h3 th:text="${profile.get().username}"></h3>
-                    <div th:text="${profile.get().firstName}"></div>
-                    <div th:text="${profile.get().lastName}"></div>
-                    <div th:text="${profile.get().mail}"></div>
-                    <div th:text="${profile.get().github}"></div>
-                    <div th:text="${profile.get().linkedin}"></div>
-                    <div th:text="${profile.get().phoneNumber}"></div>
-                </li>
-            </ul>
+            <div id="topics">
+                <div th:if="${#authentication.name == profile.get().username} or ${isAdmin}">
+                    <a class="button_form" th:href="@{/profiles/edit/{id}(id=${profile.get().id})}">Upravit</a>
+                    <form action="#" th:action="@{/profiles/delete/{id}(id=${profile.get().id})}" th:method="get"
+                          onsubmit="return confirm('Jste si jistí, že chcete odstranit Váš profil?');">
+                        <input class="button_form" type="submit" value="Odstranit">
+                    </form>
+                </div>
+                <h2 th:text="${profile.get().username}"></h2>
+                <h3>Jméno:</h3>
+                <div th:text="${profile.get().firstName} + ' ' + ${profile.get().lastName}"></div>
+                <h3>Mail:</h3>
+                <div th:text="${profile.get().mail}"></div>
+                <h3 th:if="${profile.get().github != ''}">GitHub/GitLab:</h3>
+                <div th:text="${profile.get().github}"></div>
+                <h3 th:if="${profile.get().linkedin != ''}">LinkedIn:</h3>
+                <div th:text="${profile.get().linkedin}"></div>
+                <h3 th:if="${profile.get().phoneNumber != ''}">Telefon:</h3>
+                <div th:text="${profile.get().phoneNumber}"></div>
+            </div>
         </article>
-        <div sec:authorize="isAuthenticated"><a th:href="@{/skills/create}">Přidat novou dovednost</a></div>
-        <section id="boxes">
-            <div class="container">
+        <aside id="sidebar">
+            <div class="light">
+                <div id="add-skill" th:if="${#authentication.name == profile.get().username} or ${isAdmin}"><a
+                        class="button_form"
+                        th:href="@{/profiles/{profileId}/skills/create(profileId=${profile.get().id})}">Přidat
+                    dovednost</a></div>
+                <h2>Dovednosti</h2>
                 <div class="box" th:each="skill : ${skills}">
-                    <a th:href="@{/skills/{skillId}(skillId=*{skill.id})}"><h3 th:text="*{skill.name}"></h3></a>
-                    <p th:text="*{skill.detail}"></p>
+                    <div class="skill-text">
+                        <h3 th:text="*{skill.name}"></h3>
+                        <p th:text="*{skill.detail}"></p>
+                    </div>
+                    <div class="skill-buttons" th:if="${#authentication.name == skill.owner.username} or ${isAdmin}">
+                        <a class="button_form"
+                           th:href="@{/profiles/{profileId}/skills/edit/{id}(profileId=${userId}, id=${skill.id})}">Upravit</a>
+                        <form action="#"
+                              th:action="@{/profiles/{profileId}/skills/delete/{id}(profileId=${userId}, id=${skill.id})}"
+                              th:method="get"
+                              onsubmit="return confirm('Jste si jistí, že chcete odstranit tuto dovednost?');">
+                            <input class="button_form" type="submit" value="Odstranit">
+                        </form>
+                    </div>
                 </div>
             </div>
-        </section>
+        </aside>
     </div>
 </main>
-<footer>
-    <p>Studentský zápočtový projekt na KTPW1 | 2023 Copyright &copy; Hanuš Martin | Email: hanusma2@uhk.cz |
-        Poslední úprava provedena 20. ledna 2023</p>
-</footer>
+<footer th:replace="~{components/footer :: footer}"></footer>
 
-<script>
-    function openNav() {
-        document.getElementById("mySidenav").style.width = "100%";
-    }
-
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
-    }
-
-    window.addEventListener('resize', function (event) {
-        if (window.innerWidth > 768) {
-            document.getElementById("mySidenav").style.width = "100%";
-        } else {
-            document.getElementById("mySidenav").style.width = "0";
-        }
-    }, true);
-
-</script>
 </body>
 
 </html>
