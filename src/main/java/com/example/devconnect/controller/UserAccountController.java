@@ -95,6 +95,8 @@ public class UserAccountController {
                 } else {
                     return "error/403";
                 }
+            } else {
+                return "error/404";
             }
         }
         return "error/401";
@@ -120,6 +122,8 @@ public class UserAccountController {
                 } else {
                     return "error/403";
                 }
+            } else {
+                return "error/404";
             }
         }
         return "error/401";
@@ -127,20 +131,21 @@ public class UserAccountController {
 
     @GetMapping("/profiles/{userId}/projects")
     public String getHome(@PathVariable Integer userId, Model model, Principal principal) {
-        UserAccount user = userAccountDetailsService.getUserById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        List<Project> projects = projectService.getProjectsByOwner(user);
-        model.addAttribute("projects", projects);
-
-        if (principal != null) {
-            Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
-            if (loggedUser.isPresent()) {
-                model.addAttribute("isAdmin", loggedUser.get().isAdmin());
-                model.addAttribute("userId", loggedUser.get().getId());
+        Optional<UserAccount> user = userAccountDetailsService.getUserById(userId);
+        if (user.isPresent()) {
+            List<Project> projects = projectService.getProjectsByOwner(user.get());
+            model.addAttribute("projects", projects);
+            if (principal != null) {
+                Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
+                if (loggedUser.isPresent()) {
+                    model.addAttribute("isAdmin", loggedUser.get().isAdmin());
+                    model.addAttribute("userId", loggedUser.get().getId());
+                }
             }
+            return "project/projects";
+        } else {
+            return "error/404";
         }
-        return "project/projects";
     }
 
     @GetMapping("/profiles/delete/{id}")
@@ -157,6 +162,8 @@ public class UserAccountController {
                 } else {
                     return "error/403";
                 }
+            } else {
+                return "error/404";
             }
         }
         return "error/401";

@@ -46,16 +46,16 @@ public class ProjectController {
 
     @GetMapping("/projects/{id}")
     public String getProjectById(@PathVariable Integer id, Model model, Principal principal) {
+        if (principal != null) {
+            Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(principal.getName());
+            user.ifPresent(userAccount -> model.addAttribute("userId", userAccount.getId()));
+            user.ifPresent(userAccount -> model.addAttribute("isAdmin", userAccount.isAdmin()));
+        }
         Project project = projectService.getProjectById(id);
         if (project != null) {
             List<Tag> tags = project.getTags();
             List<Comment> comments = commentService.getAllComments(project);
             List<Image> images = imageService.getAllImages(project);
-            if (principal != null) {
-                Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(principal.getName());
-                user.ifPresent(userAccount -> model.addAttribute("userId", userAccount.getId()));
-                user.ifPresent(userAccount -> model.addAttribute("isAdmin", userAccount.isAdmin()));
-            }
             model.addAttribute("project", project);
             model.addAttribute("tags", tags);
             model.addAttribute("comments", comments);
@@ -107,11 +107,11 @@ public class ProjectController {
 
             if (user.isPresent()) {
                 if (Objects.equals(owner.getUsername(), user.get().getUsername()) || user.get().isAdmin()) {
+                    model.addAttribute("userId", user.get().getId());
+                    model.addAttribute("isAdmin", user.get().isAdmin());
                     List<Tag> tags = tagService.getAllTags();
                     model.addAttribute("project", project);
                     model.addAttribute("tags", tags);
-                    model.addAttribute("userId", user.get().getId());
-                    model.addAttribute("isAdmin", user.get().isAdmin());
                     model.addAttribute("edit", true);
                     return "project/form";
                 } else {

@@ -29,14 +29,25 @@ public class SkillController {
     }
 
     @GetMapping("profiles/{profileId}/skills/create")
-    public String showCreateForm(Model model, Principal principal, @PathVariable String profileId) {
+    public String showCreateForm(Model model, Principal principal, @PathVariable Integer profileId) {
         if (principal != null) {
-            model.addAttribute("skill", new Skill());
-            model.addAttribute("userId", profileId);
-            Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(principal.getName());
-            user.ifPresent(userAccount -> model.addAttribute("isAdmin", userAccount.isAdmin()));
-            model.addAttribute("edit", false);
-            return "skill/form";
+            Optional<UserAccount> owner = userAccountDetailsService.getUserById(profileId);
+            Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
+
+            if (owner.isPresent() && loggedUser.isPresent()) {
+                if (owner.get() == loggedUser.get() || loggedUser.get().isAdmin()) {
+                    model.addAttribute("skill", new Skill());
+                    model.addAttribute("userId", profileId);
+                    Optional<UserAccount> user = userAccountDetailsService.getUserByUsername(principal.getName());
+                    user.ifPresent(userAccount -> model.addAttribute("isAdmin", userAccount.isAdmin()));
+                    model.addAttribute("edit", false);
+                    return "skill/form";
+                } else {
+                    return "error/403";
+                }
+            } else {
+                return "error/404";
+            }
         }
         return "error/401";
     }
@@ -81,6 +92,8 @@ public class SkillController {
                 } else {
                     return "error/403";
                 }
+            } else {
+                return "error/404";
             }
         }
         return "error/401";
@@ -104,6 +117,8 @@ public class SkillController {
                 } else {
                     return "error/403";
                 }
+            } else {
+                return "error/404";
             }
         }
         return "error/401";
@@ -124,6 +139,8 @@ public class SkillController {
                 } else {
                     return "error/403";
                 }
+            } else {
+                return "error/404";
             }
         }
         return "error/401";

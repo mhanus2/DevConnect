@@ -90,11 +90,16 @@ public class TagController {
             Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
             if (loggedUser.isPresent()) {
                 if (loggedUser.get().isAdmin()) {
-                    model.addAttribute("tag", tagService.getTag(id));
-                    model.addAttribute("isAdmin", loggedUser.get().isAdmin());
-                    model.addAttribute("userId", loggedUser.get().getId());
-                    model.addAttribute("edit", true);
-                    return "tag/form";
+                    Tag tag = tagService.getTag(id);
+                    if (tag != null) {
+                        model.addAttribute("tag", tag);
+                        model.addAttribute("isAdmin", loggedUser.get().isAdmin());
+                        model.addAttribute("userId", loggedUser.get().getId());
+                        model.addAttribute("edit", true);
+                        return "tag/form";
+                    } else {
+                        return "error/404";
+                    }
                 } else {
                     return "error/403";
                 }
@@ -128,8 +133,13 @@ public class TagController {
             Optional<UserAccount> loggedUser = userAccountDetailsService.getUserByUsername(principal.getName());
             if (loggedUser.isPresent()) {
                 if (loggedUser.get().isAdmin()) {
-                    tagService.delete(id);
-                    return "redirect:/tags";
+                    Tag tag = tagService.getTag(id);
+                    if (tag != null) {
+                        tagService.delete(id);
+                        return "redirect:/tags";
+                    } else {
+                        return "error/404";
+                    }
                 } else {
                     return "error/403";
                 }

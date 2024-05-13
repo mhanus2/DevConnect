@@ -14,6 +14,8 @@
                         <input class="button_form" type="submit" value="Odstranit">
                     </form>
                 </div>
+                <a class="button_form" th:href="@{/profiles/{id}/projects(id=${profile.get().id})}">Projekty</a>
+
                 <h2 th:text="${profile.get().username}"></h2>
                 <h3>Jméno:</h3>
                 <div th:text="${profile.get().firstName} + ' ' + ${profile.get().lastName}"></div>

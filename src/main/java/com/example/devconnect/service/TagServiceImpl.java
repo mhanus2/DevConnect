@@ -37,6 +37,10 @@ public class TagServiceImpl implements TagService {
         tagRepository.deleteById(id);
     }
 
+    public void delete(Tag tag) {
+        tagRepository.delete(tag);
+    }
+
     public List<PopularTag> getPopularTags() {
         return popularTagRepository.findAll();
     }
