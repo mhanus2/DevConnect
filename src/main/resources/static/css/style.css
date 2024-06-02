@@ -462,7 +462,7 @@ form input {
 }
 
 /* Media Queries */
-@media (max-width: 768px) {
+@media (max-width: 1366px) {
 
     #newsletter h1,
     #newsletter form,

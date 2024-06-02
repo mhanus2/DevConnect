@@ -27,7 +27,7 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/", "/projects/**", "profile/**", "profiles/**", "/register/**", "/images/**", "/js/**", "/css/**", "/webjars/**", "/media/**").permitAll();
+                    registry.requestMatchers("/", "/projects/**", "profile/**", "profiles/**", "/register/**", "/images/**", "/js/**", "/css/**", "/webjars/**", "/media/**", "/favicon.ico").permitAll();
                     registry.anyRequest().authenticated();
                 })
                 .formLogin(formLogin -> formLogin

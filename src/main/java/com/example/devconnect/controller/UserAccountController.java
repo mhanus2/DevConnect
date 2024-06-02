@@ -130,7 +130,7 @@ public class UserAccountController {
     }
 
     @GetMapping("/profiles/{userId}/projects")
-    public String getHome(@PathVariable Integer userId, Model model, Principal principal) {
+    public String getProjectsByUser(@PathVariable Integer userId, Model model, Principal principal) {
         Optional<UserAccount> user = userAccountDetailsService.getUserById(userId);
         if (user.isPresent()) {
             List<Project> projects = projectService.getProjectsByOwner(user.get());

@@ -2,51 +2,96 @@ package com.example.devconnect;
 
 import com.example.devconnect.model.Project;
 import com.example.devconnect.model.UserAccount;
-import com.example.devconnect.service.ProjectService;
-import com.example.devconnect.service.UserAccountDetailsService;
+import com.example.devconnect.repository.ProjectRepository;
+import com.example.devconnect.service.ProjectServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
 class DevConnectApplicationTests {
-    private final UserAccountDetailsService userAccountDetailsService;
-    private final ProjectService projectService;
+    @Mock
+    private ProjectRepository projectRepository;
 
-    DevConnectApplicationTests(UserAccountDetailsService userAccountDetailsService, ProjectService projectService) {
-        this.userAccountDetailsService = userAccountDetailsService;
-        this.projectService = projectService;
+    @InjectMocks
+    private ProjectServiceImpl projectService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testCreateAndDeleteProject() {
-        // Arrange
-        Project project = new Project();
-        project.setId(1);
-        project.setTitle("Test Project");
+    void getAllProjects() {
+        Project project1 = new Project();
+        Project project2 = new Project();
+        List<Project> projects = Arrays.asList(project1, project2);
 
-        UserAccount user = new UserAccount();
-        user.setUsername("testUser");
+        when(projectRepository.findAll()).thenReturn(projects);
 
-        when(userAccountDetailsService.getUserByUsername(anyString())).thenReturn(Optional.of(user));
-
-        // Act
-        projectService.saveProject(project);
-
-        // Assert
-        verify(projectService, times(1)).saveProject(any(Project.class));
-
-        // Act
-        projectService.deleteProject(project.getId());
-
-        // Assert
-        verify(projectService, times(1)).deleteProject(project.getId());
+        List<Project> result = projectService.getAllProjects();
+        assertEquals(2, result.size());
+        verify(projectRepository, times(1)).findAll();
     }
 
+    @Test
+    void getProjectById() {
+        Project project = new Project();
+        when(projectRepository.findById(1)).thenReturn(Optional.of(project));
 
+        Project result = projectService.getProjectById(1);
+        assertNotNull(result);
+        verify(projectRepository, times(1)).findById(1);
+    }
+
+    @Test
+    void getProjectById_NotFound() {
+        when(projectRepository.findById(1)).thenReturn(Optional.empty());
+
+        Project result = projectService.getProjectById(1);
+        assertNull(result);
+        verify(projectRepository, times(1)).findById(1);
+    }
+
+    @Test
+    void getProjectsByOwner() {
+        UserAccount owner = new UserAccount();
+        Project project1 = new Project();
+        Project project2 = new Project();
+        List<Project> projects = Arrays.asList(project1, project2);
+
+        when(projectRepository.findByOwner(owner)).thenReturn(projects);
+
+        List<Project> result = projectService.getProjectsByOwner(owner);
+        assertEquals(2, result.size());
+        verify(projectRepository, times(1)).findByOwner(owner);
+    }
+
+    @Test
+    void saveProject() {
+        Project project = new Project();
+        projectService.saveProject(project);
+        verify(projectRepository, times(1)).save(project);
+    }
+
+    @Test
+    void editProject() {
+        Project project = new Project();
+        projectService.editProject(project);
+        verify(projectRepository, times(1)).save(project);
+    }
+
+    @Test
+    void deleteProject() {
+        projectService.deleteProject(1);
+        verify(projectRepository, times(1)).deleteById(1);
+    }
 }
